@@ -1,6 +1,8 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import DonationForm, FeedingReportForm, EventForm
-from .models import Donation, FeedingReport, Event
+from .forms import (DonationForm, FeedingReportForm, EventForm)
+from .models import (Donation, FeedingReport, Event)
+
 
 # View to handle creation of a new Donation
 def create_donation(request):
@@ -71,3 +73,6 @@ def event_success(request):
     Render a success message after an event is created.
     """
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
+#Displays a message on the root URL
+def homepage(request):
+    return HttpResponse("Welcome to the Food Funding App!")
