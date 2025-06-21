@@ -1,0 +1,63 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #e0f7fa; /* light blue */
+  color: #333;
+}
+
+/* Navbar text and brand */
+.navbar {
+  background-color: #ffe4e6; /* pastel pink */
+}
+
+.navbar-text {
+  color: #6a1b9a;
+}
+
+/* Navigation links */
+.navbar-nav .nav-link {
+  color: #6a1b9a;
+  font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #4a148c;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #f3e5f5; /* soft purple */
+}
+
+.dropdown-item:hover {
+  background-color: #e1bee7;
+  color: #4a148c;
+}
+
+/* Card styles */
+.card {
+  background-color: #fff0f5; /* pastel pink */
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+  color: #6a1b9a; /* pastel purple */
+  font-weight: bold;
+}
+
+.btn-success {
+  background-color: #a5d6a7; /* soft green */
+  border: none;
+  font-weight: 500;
+}
+
+.btn-success:hover {
+  background-color: #81c784;
+  color: #fff;
+}
+
+footer {
+  background-color: #ffe4e6;
+  font-size: 0.9rem;
+  color: #444;
+}

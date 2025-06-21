@@ -1,0 +1,36 @@
+/* NAVBAR STYLES */
+.navbar {
+  background-color: #f8d7da; /* pastel pink */
+  border-bottom: 2px solid #d4a5ec; /* pastel purple */
+}
+
+.navbar-brand img {
+  border-radius: 10px;
+}
+
+.navbar-text {
+  color: #4b0082; /* dark pastel purple */
+}
+
+/* Nav Links */
+.nav-link {
+  color: #4b0082;
+  margin-right: 10px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+/* Dropdown Button */
+.btn-outline-secondary {
+  border-color: #d4a5ec;
+  color: #4b0082;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #d4a5ec;
+  color: #000;
+}
