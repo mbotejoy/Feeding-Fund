@@ -22,5 +22,14 @@ urlpatterns = [
 
     #This is for the root URL
     path('', views.homepage, name='homepage'),
+
+    #Donor dashboard page
+    path('dashboard/', views.donor_dashboard, name='donor_dashboard'),
+    
+    #Donations made by donor page
+    path('donations/', views.donor_donations, name='donor_donations'),
+
+
+
 ]
 

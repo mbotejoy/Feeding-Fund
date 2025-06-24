@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (DonationForm, FeedingReportForm, EventForm)
 from .models import (Donation, FeedingReport, Event)
@@ -75,4 +76,20 @@ def event_success(request):
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
 #Displays a message on the root URL
 def homepage(request):
-    return HttpResponse("Welcome to the Food Funding App!")
+    return render(request, 'foodfund/nourished.html')
+#View for the donor dashboard page
+#Only logged in users can access this page
+@login_required
+def donor_dashboard(request):
+    return render(request, 'foodfund/dashboard.html')
+
+def donor_donations(request):
+    # Filter donations where the donor is the logged-in user
+    donations = Donation.objects.filter(donor=request.user)
+    # Render the donation list template with the filtered donations
+    return render(request, 'foodfund/donor_donations.html', {'donations': donations})
+
+def donation_receipt(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id)
+    return render(request, 'donation_receipt.html', {'donation': donation})
+
