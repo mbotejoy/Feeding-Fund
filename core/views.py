@@ -1,26 +1,42 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm)
-from .models import (Donation, FeedingReport, Event)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm)
+from .models import (Donation, FeedingReport, Event,User)
 
 
 # View to handle creation of a new Donation
-def create_donation(request):
-    """
-    Display and process the Donation form.
-    On GET: renders an empty form.
-    On POST: validates and saves the donation, then redirects to success page.
-    """
+from django.shortcuts import render, redirect
+from .forms import DonationForm, EventParticipationForm  # Import your forms
+
+# Show the donor dashboard
+def donor_dashboard(request):
+    return render(request, 'donor_dashboard.html')  # This is the dashboard home page
+
+# Handle donation form
+def donation_form_view(request):
     if request.method == 'POST':
-        form = DonationForm(request.POST)  # Bind form with POST data
+        form = DonationForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the valid donation instance
-            return redirect('donation_success')  # Redirect to success confirmation page
+            form.save()  # Save the donation to the database
+            return redirect('donor_dashboard')  # Redirect after successful submission
     else:
-        form = DonationForm()  # Unbound form for GET request
-    # Render the donation form template with the form context
-    return render(request, 'foodfund/donation_form.html', {'form': form})
+        form = DonationForm()  # Create an empty form for GET request
+
+    return render(request, 'templates/forms/donation_form.html', {'form': form})  # Render the form template
+
+# Handle event participation form
+def event_participation_form_view(request):
+    if request.method == 'POST':
+        form = EventParticipationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save event participation
+            return redirect('donor_dashboard')  # Redirect to dashboard after submission
+    else:
+        form = EventParticipationForm()  # Display blank form for GET request
+
+    return render(request, 'forms/event_participation_form.html', {'form': form})  # Render the form template
+
 
 # View to handle submission of a Feeding Report
 def create_feeding_report(request):
@@ -76,20 +92,4 @@ def event_success(request):
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
 #Displays a message on the root URL
 def homepage(request):
-    return render(request, 'foodfund/nourished.html')
-#View for the donor dashboard page
-#Only logged in users can access this page
-@login_required
-def donor_dashboard(request):
-    return render(request, 'foodfund/dashboard.html')
-
-def donor_donations(request):
-    # Filter donations where the donor is the logged-in user
-    donations = Donation.objects.filter(donor=request.user)
-    # Render the donation list template with the filtered donations
-    return render(request, 'foodfund/donor_donations.html', {'donations': donations})
-
-def donation_receipt(request, donation_id):
-    donation = get_object_or_404(Donation, id=donation_id)
-    return render(request, 'donation_receipt.html', {'donation': donation})
-
+    return HttpResponse("Welcome to the Food Funding App!")
