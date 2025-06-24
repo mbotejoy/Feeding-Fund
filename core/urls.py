@@ -2,11 +2,18 @@ from django.urls import path
 from . import views  # Import views from the same app(core)
 
 urlpatterns = [
-    # Donation form page - shows form and handles submission
-    path('donate/', views.create_donation, name='create_donation'),
-
+   
     # Donation success page - shows after a successful donation
     path('donate/success/', views.donation_success, name='donation_success'),
+
+    #Donor dashboard view
+    path('donor-dashboard/', views.donor_dashboard, name='donor_dashboard'),
+
+    # Donation form view
+    path('donate/', views.donation_form_view, name='donation_form'),
+
+    # Event participation form view
+    path('join-event/', views.event_participation_form_view, name='event_participation_form'),
 
     # Feeding report form page - shows form and handles submission
     path('feeding-report/', views.create_feeding_report, name='create_feeding_report'),
@@ -22,5 +29,7 @@ urlpatterns = [
 
     #This is for the root URL
     path('', views.homepage, name='homepage'),
+
+    path('register/', views.register_user, name='register_user'),
 ]
 
