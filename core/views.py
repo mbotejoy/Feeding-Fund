@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm)
-from .models import (Donation, FeedingReport, Event,User)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
+from .models import (Donation, FeedingReport, Event, User, School)
 
 
 # View to handle creation of a new Donation
@@ -108,6 +108,4 @@ def register_user(request):
             return redirect('nourished.html')# success page
     else:
         form = UserForm()
-    
-    return render(request, 'foodfund/user.html', {'form': form})
-
+    return render(request, 'register.html', {'form': form})
