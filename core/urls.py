@@ -29,5 +29,8 @@ urlpatterns = [
 
     #This is for the root URL
     path('', views.homepage, name='homepage'),
+
+    path('register/', views.register_user, name='register_user'),
+
 ]
 

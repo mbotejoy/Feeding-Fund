@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Donor Dashboard</title>
-  <link rel="stylesheet" href="donor.css">
-  <link rel="stylesheet" href="navbar.css">
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
   
@@ -20,7 +20,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <a class="navbar-brand" href="#">
-      <img src="Images/Logo1.png" alt="Logo" width="120">
+      <img src="{% static 'images/Logo1.png' %}" alt="Logo" width="120">
+
     </a>
     <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished by Joy and Grace</span>
 
@@ -30,7 +31,7 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
       <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#register">Sign Up</a></li>
         <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
@@ -39,7 +40,7 @@
             Login As
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="donor_dashboard.html">Donor</a>
+            <a class="dropdown-item" href="{% url 'donor_dashboard' %}">Donor</a>
             <a class="dropdown-item" href="#">School Admin</a>
             <a class="dropdown-item" href="#">Parent</a>
             <a class="dropdown-item" href="#">Community Agent</a>
@@ -76,6 +77,6 @@
       </div>
     </div>
   </div>
-  <script src="dashboardstyles.css/donor.js"></script>
+  <script src="{% static 'js/donor.js' %}"></script>
 </body>
 </html>

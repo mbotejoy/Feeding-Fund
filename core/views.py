@@ -90,6 +90,24 @@ def event_success(request):
     Render a success message after an event is created.
     """
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
-#Displays a message on the root URL
+
+#Takes to home page
 def homepage(request):
-    return HttpResponse("Welcome to the Food Funding App!")
+    return render(request, 'forms/nourished.html')
+
+
+def register_user(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            role_name = request.POST.get('role')  # from <select id="role">
+            role = role.objects.get(name=role_name)
+            user.role = role
+            user.save()
+            return redirect('nourished.html')# success page
+    else:
+        form = UserForm()
+    
+    return render(request, 'foodfund/user.html', {'form': form})
+
