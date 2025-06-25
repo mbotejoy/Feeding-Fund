@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm)
-from .models import (Donation, FeedingReport, Event,User)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
+from .models import (Donation, FeedingReport, Event, User, School)
 
 
 # View to handle creation of a new Donation
@@ -104,3 +104,39 @@ def register_user(request):
     else:
         form = UserForm()
     return render(request, 'register.html', {'form': form})
+
+# Community Agent Dashboard
+def Communityagent_dashboard(request):
+    agent_name = request.user.get_full_name() if request.user.is_authenticated else "Community Agent"
+    return render(request, 'communityagent_dashboard.html')
+{'agent_name': agent_name}
+
+def register_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('communityagent_dashboard')
+    else:
+        form = SchoolForm()
+    return render(request, 'register_school.html', {'form': form})
+
+def submit_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'submit_feeding_report.html', {'form': form})
+
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('communityagent_dashboard')
+    else:
+        form = EventForm()
+    return render(request, 'create_event.html', {'form': form})
