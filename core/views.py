@@ -1,9 +1,30 @@
 from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
-from .models import (Donation, FeedingReport, Event, User, School)
+from .models import (Donation, FeedingReport, Event, User, School,Role)
 
+
+
+#
+def signup(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.password = make_password(user.password)
+            user.save()
+            messages.success(request, 'Registration successful!')
+            return redirect('homepage')  # Make sure 'homepage' URL name exists
+        else:
+            print("FORM ERRORS:", form.errors)
+            messages.error(request, 'Please correct the errors below.')
+            return render(request, 'forms/user.html', {'form': form, 'errors': form.errors})
+    else:
+        form = UserForm()
+        return render(request, 'forms/user.html', {'form': form})
 
 # View to handle creation of a new Donation
 from django.shortcuts import render, redirect
@@ -101,19 +122,6 @@ def homepage(request):
     return render(request, 'forms/nourished.html')
 
 
-def register_user(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            role_name = request.POST.get('role')  # from <select id="role">
-            role = role.objects.get(name=role_name)
-            user.role = role
-            user.save()
-            return redirect('nourished.html')# success page
-    else:
-        form = UserForm()
-    return render(request, 'register.html', {'form': form})
 
 def register_school(request):
     return render(request, 'forms/register_school.html')

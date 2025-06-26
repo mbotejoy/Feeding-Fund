@@ -56,7 +56,7 @@ ROOT_URLCONF = 'foodfunding.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'core' / 'templates'],
+        'DIRS': [BASE_DIR / 'core' / 'templates'/' core/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
