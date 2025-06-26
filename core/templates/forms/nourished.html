@@ -1,0 +1,225 @@
+<!--tag is used to link to static files like CSS or JS-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Nourished by Joy and Grace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/styles.css/navbar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/styles.css/index.css' %}">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'Images/Logo1.png' %}" alt="Logo" width="120">
+    </a>
+    <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished by Joy and Grace</span>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm ml-2" href="#" id="loginDropdown" data-toggle="dropdown">
+            Login As
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'donor_dashboard' %}">Donor</a>
+            <a class="dropdown-item" href="#">School Admin</a>
+            <a class="dropdown-item" href="#">Parent</a>
+<<<<<<< HEAD:core/templates/nourished.html
+            <a class="dropdown-item" href="communityagent_dashboard.html">Community Agent</a>
+=======
+            <a class="dropdown-item" href="{% url 'communityagent_dashboard' %}">Community Agent</a>
+>>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc:core/templates/forms/nourished.html
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Home page -->
+<section id="home" class="homepage bg-light"
+  <div class="container mt-5">
+    <div class="row align-items-center">
+      <!-- Left Section -->
+      <div class="col-md-6 mb-4">
+        <div class="card shadow">
+<<<<<<< HEAD:core/templates/nourished.html
+          <img src="Images/ChildrenEating.jpeg " class="card-img-top" alt="Children eating" width="">
+=======
+          <img src="{% static 'Images/ChildrenEating.jpeg' %} " class="card-img-top" alt="Children eating" width="120">
+>>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc:core/templates/forms/nourished.html
+          <div class="card-body">
+            <h5 class="card-title">Help Feed a Child Today</h5>
+            <p class="card-text">Your donation can give a child a healthy start and support their education.</p>
+            <a href class="btn btn-success btn-block">Donate Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="col-md-6">
+        <h2 class="text-dark font-weight-bold">Our Mission</h2>
+        <p>
+          Our mission is to end school hunger by connecting donors, parents, teachers and community agents through a transparent food funding platform. Inspired by our Service Based Learning experience at a public school using Tap2Eat where many children couldn’t afford even one daily meal we set out to build a solution that ensures every child receives consistent, nutritious meals and a fair chance to thrive.
+        </p>
+        <p>
+          Every contribution goes directly to ensuring children are well-fed and able to focus on learning, growing, and thriving.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Us page-->
+<section id="about" class="aboutus bg-white">
+  <h2 class="mt-3">About Us page</h2>
+<hr>
+<div class="container border rounded p-4 bg-white">
+  <div class="row">
+    <!-- Left Section: Images and Captions -->
+    <div class="col-md-6">
+      <div class="row mb-3">
+        <div class="col-6">
+          <div class="card text-center mb-3">
+            <div class="card-header bg-light font-weight-bold">Joy</div>
+            <div class="card-body bg-light">
+              <!-- Placeholder image -->
+              <img src="{%static 'Images/JoyPhoto.jpg' %}" alt="Joy" class="img-fluid" style="min-height:100px; max-height:120px;">
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card text-center mb-3">
+            <div class="card-header bg-light font-weight-bold">Grace</div>
+            <div class="card-body bg-light">
+              <!-- Placeholder image -->
+              <img src="{%static 'Images/PassportPhoto.jpg' %}" alt="Grace" class="img-fluid" style="min-height:100px; max-height:120px;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card text-center">
+        <div class="card-header bg-light font-weight-bold">Volunteers giving school meals</div>
+        <div class="card-body bg-light">
+          <!-- Placeholder image -->
+          <img src="{% static 'Images/VolunteersGivingMeals.jpeg' %}" alt="Volunteers" class="img-fluid" style="min-height:100px; max-height:120px;">
+        </div>
+      </div>
+    </div>
+    <!-- Right Section: About Us Text -->
+    <div class="col-md-6">
+      <h4 class="text-center mb-3">About Us</h4>
+      <p>
+        At <strong>Nourished by Joy and Grace</strong> we believe that no child should go to school hungry.
+      </p>
+      <p>
+        Our journey began during our Service Based Learning (SBL) program at a public primary school. There, we observed how the school used the Tap2Eat system to provide meals to students. While the initiative was impactful, it had limitations only one meal was offered per day, and many children couldn’t afford even that. It was heartbreaking to see learners struggle with hunger, which directly affected their concentration, energy, and overall well-being.
+      </p>
+      <p>
+        This experience inspired us to create a food funding platform that goes beyond basic meal provision. We envisioned a system that not only connects donors directly with needy families but also ensures transparency, tracks donations in real time, and empowers communities to take part in the solution.
+      </p>
+      <p>
+        Our platform supports donors, parents, teachers and community agents, working together to fight food insecurity in schools. Through role-based access and smart integration tools like M-Pesa, we ensure every child has the opportunity to receive consistent and nutritious meals not just once, but throughout their school day.
+      </p>
+      <p>
+        We're committed to accountability, inclusivity, and impact because feeding children isn’t just about food, it’s about feeding hope and opportunity.
+      </p>
+      <p>
+        <strong>Together, we can feed futures.</strong>
+      </p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Imapct Page-->
+ <section id="impact" class="ourimpact bg-white">
+  <h2 class="mt-3">Our Impact Page</h2>
+<hr>
+<h3 class="text-center my-4">Our Impact</h3>
+<hr>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Video of a successful feeding event (large left block) -->
+    <div class="col-lg-6 mb-3">
+      <div class="card h-100">
+        <div class="card-header bg-light font-weight-bold">
+          Video of a successful feeding event
+        </div>
+        <div class="card-body d-flex align-items-center justify-content-center" style="min-height:300px;">
+          <!-- Replace src with your actual video file or YouTube embed -->
+          <video controls width="100%" style="max-height:260px;">
+            <source src="{% static 'foodfund/feeding_event.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+    <!-- Right grid: 2 columns of images -->
+    <div class="col-lg-6">
+      <div class="row h-50">
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header bg-light font-weight-bold">School lunch being served</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+              <img src="{% static 'Images/MealsBeingServed.jpg' %}" alt="School lunch being served" class="img-fluid">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header bg-light font-weight-bold">Children eating the meals</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+              <img src="{%static 'Images/Children_eating_image.webp' %}" alt="Children eating the meals" class="img-fluid">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row h-50">
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header bg-light font-weight-bold">Smiling children after meals</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+              <img src="https://via.placeholder.com/150x80?text=Smiling+Children" alt="Smiling children after meals" class="img-fluid">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header bg-light font-weight-bold">Donors serving meals</div>
+            <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+ </section>
+
+<!-- Footer -->
+<footer class="bg-light mt-5 p-3 text-center text-muted">
+  &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,11 +1,19 @@
 from django.db import models
 
+
 # Represents different user roles (e.g., donor, admin, parent)
 class Role(models.Model):
-    role = models.CharField(max_length=50)  # Name of the role
+    ROLE_CHOICES = [
+        ('Donor', 'Donor'),
+        ('Parent', 'Parent'),
+        ('School Admin', 'School Admin'),
+        ('Community Agent', 'Community Agent'),
+    ]
 
-    def _str_(self):
-        return self.role
+    name = models.CharField(max_length=50, choices=ROLE_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.get_name_display()  # shows human-readable label
 
 # Custom user model 
 class User(models.Model):

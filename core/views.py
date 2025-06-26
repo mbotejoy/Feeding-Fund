@@ -1,8 +1,30 @@
 from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password 
+from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
-from .models import (Donation, FeedingReport, Event, User, School)
+from .models import (Donation, FeedingReport, Event, User, School,Role)
 
+
+
+#
+def signup(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.password = make_password(user.password)
+            user.save()
+            messages.success(request, 'Registration successful!')
+            return redirect('homepage')  # Make sure 'homepage' URL name exists
+        else:
+            print("FORM ERRORS:", form.errors)
+            messages.error(request, 'Please correct the errors below.')
+            return render(request, 'forms/user.html', {'form': form, 'errors': form.errors})
+    else:
+        form = UserForm()
+        return render(request, 'forms/user.html', {'form': form})
 
 # View to handle creation of a new Donation
 from django.shortcuts import render, redirect
@@ -11,6 +33,11 @@ from .forms import DonationForm, EventParticipationForm  # Import your forms
 # Show the donor dashboard
 def donor_dashboard(request):
     return render(request, 'donor_dashboard.html')  # This is the dashboard home page
+
+# Show the community_agent dashboard
+def communityagent_dashboard(request):
+    return render(request, 'communityagent_dashboard.html')
+
 
 # Handle donation form
 def donation_form_view(request):
@@ -89,54 +116,16 @@ def event_success(request):
     Render a success message after an event is created.
     """
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
-#Displays a message on the root URL
+
+#Takes to home page
 def homepage(request):
-    return HttpResponse("Welcome to the Food Funding App!")
+    return render(request, 'forms/nourished.html')
 
 
-
-def register_user(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('nourished.html')  # Make sure to define this URL or template
-    else:
-        form = UserForm()
-    return render(request, 'register.html', {'form': form})
-
-# Community Agent Dashboard
-def Communityagent_dashboard(request):
-    agent_name = request.user.get_full_name() if request.user.is_authenticated else "Community Agent"
-    return render(request, 'communityagent_dashboard.html')
-{'agent_name': agent_name}
 
 def register_school(request):
-    if request.method == 'POST':
-        form = SchoolForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('communityagent_dashboard')
-    else:
-        form = SchoolForm()
-    return render(request, 'register_school.html', {'form': form})
+    return render(request, 'forms/register_school.html')
 
 def submit_feeding_report(request):
-    if request.method == 'POST':
-        form = FeedingReportForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
-    else:
-        form = FeedingReportForm()
-    return render(request, 'submit_feeding_report.html', {'form': form})
+    return render(request, 'forms/submit_feeding_report.html')
 
-def create_event(request):
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('communityagent_dashboard')
-    else:
-        form = EventForm()
-    return render(request, 'create_event.html', {'form': form})

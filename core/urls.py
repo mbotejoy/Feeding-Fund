@@ -27,16 +27,18 @@ urlpatterns = [
     # Event success page
     path('event/success/', views.event_success, name='event_success'),
 
-    #This is for the root URL
+    #This is for the homepage
     path('', views.homepage, name='homepage'),
 
-    path('register/', views.register_user, name='register_user'),
-    
-    #Communityagent Dashboard
+    #Community Agent dashboard view
+    path('communityagent-dashboard/', views.communityagent_dashboard, name='communityagent_dashboard'),
 
-    path('communityagent_dashboard/', views.Communityagent_dashboard, name='communityagent_dashboard'),
     path('register-school/', views.register_school, name='register_school'),
-    path('submit-feeding-report/', views.submit_feeding_report, name='submit_feeding_report'),
-    path('create-event/', views.create_event, name='create_event'),
+    
+    path('submit_feeding_report/', views.submit_feeding_report, name='submit_feeding_report'),
+
+    # Link for the signup page
+    path('signup/', views.signup, name='signup'),
+
 ]
 

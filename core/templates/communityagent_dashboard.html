@@ -19,7 +19,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <a class="navbar-brand" href="#">
-      <img src="Images/Logo1.png" alt="Logo" width="120">
+      <img src="{%static 'Images/Logo1.png'%}" alt="Logo" width="120">
     </a>
     <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished by Joy and Grace</span>
 
@@ -29,11 +29,29 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
       <ul class="navbar-nav">
+<<<<<<< HEAD
         <li class="nav-item"><a class="nav-link" href="nourished.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="nourished.html">About Us</a></li>
         <li class="nav-item"><a class="nav-link" href="nourished.html">Sign Up</a></li>
         <li class="nav-item"><a class="nav-link" href="nourished.html">Impact</a></li>
         
+=======
+        <li class="nav-item"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm ml-2" href="#" id="loginDropdown" data-toggle="dropdown">
+            Login As
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'donor_dashboard' %}">Donor</a>
+            <a class="dropdown-item" href="#">School Admin</a>
+            <a class="dropdown-item" href="#">Parent</a>
+            <a class="dropdown-item" href="#">Community Agent</a>
+          </div>
+        </li>
+>>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc
       </ul>
     </div>
   </div>
@@ -58,7 +76,7 @@
 
       <!-- Right Column: Image -->
       <div class="col-md-6 text-center">
-        <img src="Images/CommunityAgent.png" alt="Community Agent" class="img-fluid rounded shadow" />
+        <img src="{% static 'Images/CommunityAgent.png'%}" alt="Community Agent" class="img-fluid rounded shadow" />
         <p class="mt-3 text-muted fst-italic">Empowering community agents to make a difference.</p>
       </div>
     </div>
