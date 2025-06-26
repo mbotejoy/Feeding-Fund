@@ -31,5 +31,14 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
 
     path('register/', views.register_user, name='register_user'),
+
+    
+    #Community Agent dashboard view
+    path('communityagent-dashboard/', views.communityagent_dashboard, name='communityagent_dashboard'),
+
+    path('register-school/', views.register_school, name='register_school'),
+    
+    path('submit_feeding_report/', views.submit_feeding_report, name='submit_feeding_report'),
+
 ]
 

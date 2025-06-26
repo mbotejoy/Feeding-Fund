@@ -13,6 +13,11 @@ from .forms import DonationForm, EventParticipationForm  # Import your forms
 def donor_dashboard(request):
     return render(request, 'donor_dashboard.html')  # This is the dashboard home page
 
+# Show the community_agent dashboard
+def communityagent_dashboard(request):
+    return render(request, 'communityagent_dashboard.html')
+
+
 # Handle donation form
 def donation_form_view(request):
     if request.method == 'POST':
@@ -109,3 +114,10 @@ def register_user(request):
     else:
         form = UserForm()
     return render(request, 'register.html', {'form': form})
+
+def register_school(request):
+    return render(request, 'forms/register_school.html')
+
+def submit_feeding_report(request):
+    return render(request, 'forms/submit_feeding_report.html')
+
