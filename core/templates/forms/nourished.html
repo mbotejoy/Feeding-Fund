@@ -44,13 +44,9 @@
           </a>
           <div class="dropdown-menu">
             <a class="dropdown-item" href="{% url 'donor_dashboard' %}">Donor</a>
-            <a class="dropdown-item" href="#">School Admin</a>
-            <a class="dropdown-item" href="#">Parent</a>
-<<<<<<< HEAD:core/templates/nourished.html
-            <a class="dropdown-item" href="communityagent_dashboard.html">Community Agent</a>
-=======
+            <a class="dropdown-item" href="{% url 'school_admin' %}">School Admin</a>
+            <a class="dropdown-item" href="{% url 'parent' %}">Parent</a>
             <a class="dropdown-item" href="{% url 'communityagent_dashboard' %}">Community Agent</a>
->>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc:core/templates/forms/nourished.html
           </div>
         </li>
       </ul>
@@ -65,11 +61,7 @@
       <!-- Left Section -->
       <div class="col-md-6 mb-4">
         <div class="card shadow">
-<<<<<<< HEAD:core/templates/nourished.html
-          <img src="Images/ChildrenEating.jpeg " class="card-img-top" alt="Children eating" width="">
-=======
           <img src="{% static 'Images/ChildrenEating.jpeg' %} " class="card-img-top" alt="Children eating" width="120">
->>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc:core/templates/forms/nourished.html
           <div class="card-body">
             <h5 class="card-title">Help Feed a Child Today</h5>
             <p class="card-text">Your donation can give a child a healthy start and support their education.</p>
