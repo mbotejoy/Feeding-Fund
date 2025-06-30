@@ -7,20 +7,16 @@
 <body>
 <div class="container mt-4">
   <h2>Donor Event Participation</h2>
-  <form>
-    <div class="mb-3">
-      <label class="form-label">Select Event</label>
-      <select class="form-control">
-        <option>Back to School Drive</option>
-        <option>Feeding Day</option>
-        <option>Charity Walk</option>
-      <option>Fundraiser Gala</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Donor Name</label>
-      <input type="text" class="form-control" placeholder="Your Name">
-    </div>
+  
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
     <button type="submit" class="btn btn-success">Register</button>
   </form>
 </div>

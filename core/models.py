@@ -82,13 +82,14 @@ class Event(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)# User who created the event
     created_at = models.DateTimeField(auto_now_add=True)          # Timestamp of event creation
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 # Tracks which users (donors) participate in which events
 class EventParticipation(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)    # Event participated in
     donor = models.ForeignKey(User, on_delete=models.CASCADE)     # Donor participating
+
 
 # Records student attendance for a particular date
 class Attendance(models.Model):

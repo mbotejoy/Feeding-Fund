@@ -87,7 +87,7 @@ def attendance(request):
         form = AttendanceForm()
     return render(request, 'forms/attendance.html', {'form': form})
 
-    #View of the submission of a feeding report
+#View of the submission of a feeding report
 def create_feeding_report(request):
     if request.method == 'POST':
         form = FeedingReportForm(request.POST)
@@ -99,6 +99,30 @@ def create_feeding_report(request):
         form = FeedingReportForm()
     return render(request, 'forms/feeding_report.html', {'form': form})
 
+ #View of the submission of a feeding report
+def create_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding Report Created Successfully!")
+            return redirect('school_admin')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
+
+# Handle event participation form
+def join_an_event(request):
+    if request.method == 'POST':
+        form = EventParticipationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save event participation
+            messages.success(request, "You have successfully joined the event!")
+            return redirect('donor_dashboard')  # Redirect to dashboard after submission
+    else:
+        form = EventParticipationForm()  # Display blank form for GET request
+
+    return render(request, 'forms/event_participation.html', {'form': form})  # Render the form template
 
 
 
@@ -119,6 +143,20 @@ def parent(request):
     return render(request, 'parent.html')
 
 
+#Takes to home page
+def homepage(request):
+    return render(request, 'forms/nourished.html')
+
+#About Us Page
+def about_us(request):
+    return render(request, 'forms/nourished.html')
+
+#Impact Page
+def impact(request):
+    return render(request, 'forms/nourished.html')
+
+
+
 
 
 
@@ -133,20 +171,6 @@ def donation_form_view(request):
         form = DonationForm()  # Create an empty form for GET request
 
     return render(request, 'templates/forms/donation_form.html', {'form': form})  # Render the form template
-
-# Handle event participation form
-def event_participation_form_view(request):
-    if request.method == 'POST':
-        form = EventParticipationForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save event participation
-            return redirect('donor_dashboard')  # Redirect to dashboard after submission
-    else:
-        form = EventParticipationForm()  # Display blank form for GET request
-
-    return render(request, 'forms/event_participation_form.html', {'form': form})  # Render the form template
-
-
 
 
 # Simple success page for Donation submission
@@ -170,17 +194,6 @@ def event_success(request):
     """
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
 
-#Takes to home page
-def homepage(request):
-    return render(request, 'forms/nourished.html')
-
-#About Us Page
-def about_us(request):
-    return render(request, 'forms/nourished.html')
-
-#Impact Page
-def impact(request):
-    return render(request, 'forms/nourished.html')
 
 
 

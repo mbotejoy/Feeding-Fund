@@ -53,10 +53,17 @@
       <p>
         Thank you for your generous support! Your contributions help us deliver vital resources to those in need. Explore your giving history, make a new donation, or join our next event to multiply your impact.
       </p>
+
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    
       <div class="dashboard-buttons mt-4">
         <a href="donation-form.html" class="btn btn-primary">Donate Funds</a>
         <a href="donation-history.html" class="btn btn-outline-secondary">View Donation History</a>
-        <a href="events-form.html" class="btn btn-info text-white">Join an Event</a>
+        <a href="{% url 'join_an_event' %}" class="btn btn-info text-white">Join an Event</a>
       </div>
     </div>
 

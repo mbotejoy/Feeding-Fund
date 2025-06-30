@@ -121,6 +121,10 @@ class EventParticipationForm(forms.ModelForm):
             'event': forms.Select(attrs={'class': 'form-control'}),               # Event selection
             'donor': forms.Select(attrs={'class': 'form-control'}),               # Donor user selection
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        #  donor filtering 
+        self.fields['donor'].queryset = User.objects.filter(role__name='Donor')
 
 # Form to record student Attendance for a given date
 class AttendanceForm(forms.ModelForm):

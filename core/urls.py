@@ -11,10 +11,7 @@ urlpatterns = [
 
     # Donation form view
     path('donate/', views.donation_form_view, name='donation_form'),
-
-    # Event participation form view
-    path('join-event/', views.event_participation_form_view, name='event_participation_form'),
-
+    
     # Feeding report success page
     path('feeding-report/success/', views.feeding_report_success, name='feeding_report_success'),
 
@@ -59,6 +56,9 @@ urlpatterns = [
 
     #School Admin/Teacher creates the reports
     path('create-feeding-report/', views.create_feeding_report, name='create_feeding_report'),
+
+    #View of the event participation
+    path('join-an-event/', views.join_an_event, name='join_an_event'),
 
 
 

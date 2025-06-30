@@ -54,6 +54,12 @@
   </div>
 </nav>
 
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+     {% endif %}
+
 <!-- Home page -->
 <section id="home" class="homepage bg-light"
   <div class="container mt-5">
