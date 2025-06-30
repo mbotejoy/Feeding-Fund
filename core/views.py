@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
-from .models import (Donation, FeedingReport, Event, User, School,Role)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm)
+from .models import (Donation, FeedingReport, Event, User, School,Role,Student)
 
 
 
@@ -43,7 +43,7 @@ def register_school(request):
         form = SchoolForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "School Registered Successfully!")
+            messages.success(request, "Registered School Successfully!")
             return redirect('communityagent_dashboard')
     else:
         form = SchoolForm()
@@ -61,6 +61,18 @@ def create_event(request):
     else:
         form = EventForm()
     return render(request, 'forms/event.html', {'form': form})
+
+# View to handle registration of a child by a parent
+def register_child(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Child Registered Successfully!")
+            return redirect('parent')
+    else:
+        form = StudentForm()
+    return render(request, 'forms/student.html', {'form': form})
 
 
 
