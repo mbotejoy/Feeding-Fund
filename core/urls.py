@@ -57,6 +57,9 @@ urlpatterns = [
     #Link to Attendace form
     path('attendance/', views.attendance, name='attendance'),
 
+    #School Admin/Teacher creates the reports
+    path('create-feeding-report/', views.create_feeding_report, name='create_feeding_report'),
+
 
 
 

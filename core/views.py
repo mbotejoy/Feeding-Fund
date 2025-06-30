@@ -87,6 +87,19 @@ def attendance(request):
         form = AttendanceForm()
     return render(request, 'forms/attendance.html', {'form': form})
 
+    #View of the submission of a feeding report
+def create_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding Report Created Successfully!")
+            return redirect('school_admin')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
+
+
 
 
 # Show the donor dashboard

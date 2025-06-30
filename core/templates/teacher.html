@@ -47,8 +47,15 @@
           <p>
             Thank you for your dedication to our students. Here you can quickly submit today’s feeding report, mark attendance, and review your class statistics. Your commitment ensures every child’s well-being and learning success.
           </p>
+
+     {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+     {% endif %}
+
           <div class="dashboard-buttons d-flex flex-column">
-            <a href="feeding-report.html" class="btn btn-primary mb-3">Feeding Report</a>
+            <a href="{% url 'create_feeding_report' %}" class="btn btn-primary mb-3">Feeding Report</a>
             <a href="{% url 'attendance' %}" class="btn btn-secondary">Attendance Form</a>
           </div>
         </div>
