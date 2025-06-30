@@ -38,6 +38,16 @@ def submit_feeding_report(request):
         form = FeedingReportForm()
     return render(request, 'forms/feeding_report.html', {'form': form})
 
+def register_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "School Registered Successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = SchoolForm()
+    return render(request, 'forms/school.html', {'form': form})
 
 
 
@@ -137,7 +147,6 @@ def impact(request):
     return render(request, 'forms/nourished.html')
 
 
-def register_school(request):
-    return render(request, 'forms/register_school.html')
+
 
 
