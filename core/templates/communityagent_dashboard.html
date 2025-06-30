@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,19 +30,10 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
       <ul class="navbar-nav">
-<<<<<<< HEAD
-        <li class="nav-item"><a class="nav-link" href="nourished.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="nourished.html">About Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="nourished.html">Sign Up</a></li>
-        <li class="nav-item"><a class="nav-link" href="nourished.html">Impact</a></li>
-        
-=======
         <li class="nav-item"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about_us' %}">About Us</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
-        <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
-      
->>>>>>> f2620dd3ca27f40570b65bb260189141230fe3cc
+        <li class="nav-item"><a class="nav-link" href="{% url 'impact' %}">Impact</a></li>
       </ul>
     </div>
   </div>

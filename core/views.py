@@ -38,6 +38,17 @@ def donor_dashboard(request):
 def communityagent_dashboard(request):
     return render(request, 'communityagent_dashboard.html')
 
+# Show the school admin dashboard
+def school_admin(request):
+    return render(request, 'teacher.html')
+
+# Show the parent dashboard
+def parent(request):
+    return render(request, 'parent.html')
+
+
+
+
 
 # Handle donation form
 def donation_form_view(request):
@@ -120,6 +131,17 @@ def event_success(request):
 #Takes to home page
 def homepage(request):
     return render(request, 'forms/nourished.html')
+
+#About Us Page
+def about_us(request):
+    return render(request, 'forms/nourished.html')
+
+#Impact Page
+def impact(request):
+    return render(request, 'forms/nourished.html')
+
+
+
 
 
 
