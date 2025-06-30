@@ -24,7 +24,7 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of user creation
 
     def _str_(self):
-        return self.full_name
+        return self.full_name 
 
 # Represents a school participating in the program
 class School(models.Model):
@@ -56,12 +56,14 @@ class Donation(models.Model):
 
 # Report on the feeding program at a school
 class FeedingReport(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)      # User submitting the report
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # School being reported on
+    user = models.CharField(max_length=255)      # User submitting the report
+    school = models.CharField(max_length=255)  # School being reported on
     report_date = models.DateField()                              # Date of the report
     meals_received = models.IntegerField()                        # Number of meals received
     meals_served = models.IntegerField()                          # Number of meals served
     comments = models.TextField(blank=True)                       # Additional comments (optional)
+    def __str__(self):
+        return f"Report for {self.school} on {self.report_date}"
 
 # User feedback about the system or program
 class Feedback(models.Model):

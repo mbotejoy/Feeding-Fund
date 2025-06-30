@@ -7,33 +7,19 @@
 <body>
 <div class="container mt-4">
   <h2>Submit Feeding Report</h2>
-  <form>
-    <div class="mb-3">
-      <label class="form-label">Community Agent Name</label>
-      <input type="text" class="form-control" placeholder="Agent Name">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">School Name</label>
-      <input type="text" class="form-control" placeholder="School Name">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Report Date</label>
-      <input type="date" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Meals Received</label>
-      <input type="number" class="form-control" min="0">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Meals Served</label>
-      <input type="number" class="form-control" min="0">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Comments</label>
-      <textarea class="form-control" rows="3" placeholder="Any issues or remarks"></textarea>
-    </div>
-    <button type="submit" class="btn btn-info">Submit Report</button>
-  </form>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-info">Submit Report</button>
+</form>
+
 </div>
 </body>
 </html>

@@ -25,10 +25,21 @@ def signup(request):
     else:
         form = UserForm()
         return render(request, 'forms/user.html', {'form': form})
+    
+    #View of the submission of a feeding report
+def create_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding report submitted successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
 
-# View to handle creation of a new Donation
-from django.shortcuts import render, redirect
-from .forms import DonationForm, EventParticipationForm  # Import your forms
+
+
 
 # Show the donor dashboard
 def donor_dashboard(request):
@@ -75,21 +86,6 @@ def event_participation_form_view(request):
     return render(request, 'forms/event_participation_form.html', {'form': form})  # Render the form template
 
 
-# View to handle submission of a Feeding Report
-def create_feeding_report(request):
-    """
-    Display and process the Feeding Report form.
-    On GET: renders an empty form.
-    On POST: validates and saves the report, then redirects to success page.
-    """
-    if request.method == 'POST':
-        form = FeedingReportForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('feeding_report_success')
-    else:
-        form = FeedingReportForm()
-    return render(request, 'foodfund/feeding_report_form.html', {'form': form})
 
 # View to handle creation of a new Event
 def create_event(request):
@@ -141,13 +137,7 @@ def impact(request):
     return render(request, 'forms/nourished.html')
 
 
-
-
-
-
 def register_school(request):
     return render(request, 'forms/register_school.html')
 
-def submit_feeding_report(request):
-    return render(request, 'forms/submit_feeding_report.html')
 

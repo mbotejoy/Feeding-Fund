@@ -73,8 +73,8 @@ class FeedingReportForm(forms.ModelForm):
         model = FeedingReport
         fields = ['user', 'school', 'report_date', 'meals_received', 'meals_served', 'comments']
         widgets = {
-            'user': forms.Select(attrs={'class': 'form-control'}),                # Reporter (user)
-            'school': forms.Select(attrs={'class': 'form-control'}),              # School reported on
+            'user': forms.TextInput(attrs={'class': 'form-control'}),                # Reporter (user)
+            'school': forms.TextInput(attrs={'class': 'form-control'}),              # School reported on
             'report_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),  # Date picker input
             'meals_received': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),  # Non-negative integer
             'meals_served': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),    # Non-negative integer
