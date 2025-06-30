@@ -14,6 +14,7 @@ class Role(models.Model):
 
     def __str__(self):
         return self.get_name_display()  # shows human-readable label
+    
 
 # Custom user model 
 class User(models.Model):
@@ -23,19 +24,19 @@ class User(models.Model):
     password = models.CharField(max_length=128)               # Password (should be hashed)
     created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of user creation
 
-    def _str_(self):
-        return self.full_name 
+    def __str__(self):
+     return self.full_name
 
 # Represents a school participating in the program
 class School(models.Model):
-    school_name = models.CharField(max_length=255)            # Name of the school
-    location = models.CharField(max_length=255)               # Physical location
-    email = models.EmailField()                               # Contact email
-    phone_number = models.CharField(max_length=20)            # Contact phone number
-    created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of school entry
+    school_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
-        return self.school_name
+    def __str__(self):
+        return self.school_name 
 
 # Represents a student enrolled in a school
 class Student(models.Model):
@@ -76,7 +77,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)                      # Event title
     description = models.TextField()                              # Event description
     event_date = models.DateField()                               # Date of the event
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
+    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school;This tells Django: each event is linked to a single school.
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)# User who created the event
     created_at = models.DateTimeField(auto_now_add=True)          # Timestamp of event creation
 

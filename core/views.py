@@ -50,6 +50,19 @@ def register_school(request):
     return render(request, 'forms/school.html', {'form': form})
 
 
+# View to handle creation of a new Event
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event Created  Successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = EventForm()
+    return render(request, 'forms/event.html', {'form': form})
+
+
 
 # Show the donor dashboard
 def donor_dashboard(request):
@@ -97,21 +110,6 @@ def event_participation_form_view(request):
 
 
 
-# View to handle creation of a new Event
-def create_event(request):
-    """
-    Display and process the Event creation form.
-    On GET: renders an empty form.
-    On POST: validates and saves the event, then redirects to success page.
-    """
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('event_success')
-    else:
-        form = EventForm()
-    return render(request, 'foodfund/event_form.html', {'form': form})
 
 # Simple success page for Donation submission
 def donation_success(request):

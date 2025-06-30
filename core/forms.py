@@ -103,6 +103,14 @@ class EventForm(forms.ModelForm):
             'school': forms.Select(attrs={'class': 'form-control'}),
             'created_by': forms.Select(attrs={'class': 'form-control'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        # Show only users whose role is 'Community Agent'
+        self.fields['created_by'].queryset = User.objects.filter(role__name='Community Agent')
+        print(self.fields['created_by'].queryset)
+
+
 
 # Form to manage participation of donors in events
 class EventParticipationForm(forms.ModelForm):

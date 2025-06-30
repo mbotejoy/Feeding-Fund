@@ -45,6 +45,7 @@ urlpatterns = [
     #Parent dashboard view
     path('parent-dashboard/', views.parent, name='parent'),
 
+    #Community Agent is able to register a school
     path('register-school/', views.register_school, name='register_school'),
     
     #Community Agent submits these reports
