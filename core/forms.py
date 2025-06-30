@@ -73,8 +73,8 @@ class FeedingReportForm(forms.ModelForm):
         model = FeedingReport
         fields = ['user', 'school', 'report_date', 'meals_received', 'meals_served', 'comments']
         widgets = {
-            'user': forms.Select(attrs={'class': 'form-control'}),                # Reporter (user)
-            'school': forms.Select(attrs={'class': 'form-control'}),              # School reported on
+            'user': forms.TextInput(attrs={'class': 'form-control'}),                # Reporter (user)
+            'school': forms.TextInput(attrs={'class': 'form-control'}),              # School reported on
             'report_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),  # Date picker input
             'meals_received': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),  # Non-negative integer
             'meals_served': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),    # Non-negative integer
@@ -103,6 +103,14 @@ class EventForm(forms.ModelForm):
             'school': forms.Select(attrs={'class': 'form-control'}),
             'created_by': forms.Select(attrs={'class': 'form-control'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        # Show only users whose role is 'Community Agent'
+        self.fields['created_by'].queryset = User.objects.filter(role__name='Community Agent')
+        print(self.fields['created_by'].queryset)
+
+
 
 # Form to manage participation of donors in events
 class EventParticipationForm(forms.ModelForm):
@@ -113,6 +121,10 @@ class EventParticipationForm(forms.ModelForm):
             'event': forms.Select(attrs={'class': 'form-control'}),               # Event selection
             'donor': forms.Select(attrs={'class': 'form-control'}),               # Donor user selection
         }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        #  donor filtering 
+        self.fields['donor'].queryset = User.objects.filter(role__name='Donor')
 
 # Form to record student Attendance for a given date
 class AttendanceForm(forms.ModelForm):

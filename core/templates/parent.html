@@ -48,8 +48,15 @@
         <p>
           Manage your child’s school experience with ease. You can register your child, keep track of their wallet for meals and activities, and monitor their feeding history.
         </p>
+
+     {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+     {% endif %}
+
         <div class="dashboard-buttons d-flex flex-column">
-            <a href="register-child.html" class="btn btn-primary mb-3">Register Child</a>
+            <a href="{% url 'register_child'%}"class="btn btn-secondary mb-3">Register Child</a>
             <a href="update-wallet.html" class="btn btn-secondary mb-3">Update Child's Wallet</a>
             <a href="view-wallet.html" class="btn btn-tertiary">View Child's Wallet</a>
        </div>

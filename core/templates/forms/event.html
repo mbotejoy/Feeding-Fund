@@ -7,29 +7,18 @@
 <body>
 <div class="container mt-4">
   <h2>Create School Event</h2>
-  <form>
-    <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input type="text" class="form-control" placeholder="Event title">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <textarea class="form-control" rows="4" placeholder="What is the event about?"></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">School</label>
-      <input type="text" class="form-control" placeholder="School Name">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Created By</label>
-      <input type="text" class="form-control" placeholder="Agent ID or Name">
-    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
     <button type="submit" class="btn btn-warning">Create Event</button>
-  </form>
+</form>
 </div>
 </body>
 </html>

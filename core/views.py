@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm)
-from .models import (Donation, FeedingReport, Event, User, School,Role)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm)
+from .models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance)
 
 
 
@@ -25,10 +25,106 @@ def signup(request):
     else:
         form = UserForm()
         return render(request, 'forms/user.html', {'form': form})
+    
+    #View of the submission of a feeding report
+def submit_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding report submitted successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
 
-# View to handle creation of a new Donation
-from django.shortcuts import render, redirect
-from .forms import DonationForm, EventParticipationForm  # Import your forms
+#View to handle registering of a school
+def register_school(request):
+    if request.method == 'POST':
+        form = SchoolForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registered School Successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = SchoolForm()
+    return render(request, 'forms/school.html', {'form': form})
+
+
+# View to handle creation of a new Event
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event Created  Successfully!")
+            return redirect('communityagent_dashboard')
+    else:
+        form = EventForm()
+    return render(request, 'forms/event.html', {'form': form})
+
+# View to handle registration of a child by a parent
+def register_child(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Child Registered Successfully!")
+            return redirect('parent')
+    else:
+        form = StudentForm()
+    return render(request, 'forms/student.html', {'form': form})
+
+# View to handle attendance
+def attendance(request):
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Recorded Student Attendance Successfully!")
+            return redirect('school_admin')
+    else:
+        form = AttendanceForm()
+    return render(request, 'forms/attendance.html', {'form': form})
+
+#View of the submission of a feeding report
+def create_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding Report Created Successfully!")
+            return redirect('school_admin')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
+
+ #View of the submission of a feeding report
+def create_feeding_report(request):
+    if request.method == 'POST':
+        form = FeedingReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Feeding Report Created Successfully!")
+            return redirect('school_admin')
+    else:
+        form = FeedingReportForm()
+    return render(request, 'forms/feeding_report.html', {'form': form})
+
+# Handle event participation form
+def join_an_event(request):
+    if request.method == 'POST':
+        form = EventParticipationForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save event participation
+            messages.success(request, "You have successfully joined the event!")
+            return redirect('donor_dashboard')  # Redirect to dashboard after submission
+    else:
+        form = EventParticipationForm()  # Display blank form for GET request
+
+    return render(request, 'forms/event_participation.html', {'form': form})  # Render the form template
+
+
 
 # Show the donor dashboard
 def donor_dashboard(request):
@@ -47,6 +143,20 @@ def parent(request):
     return render(request, 'parent.html')
 
 
+#Takes to home page
+def homepage(request):
+    return render(request, 'forms/nourished.html')
+
+#About Us Page
+def about_us(request):
+    return render(request, 'forms/nourished.html')
+
+#Impact Page
+def impact(request):
+    return render(request, 'forms/nourished.html')
+
+
+
 
 
 
@@ -62,50 +172,6 @@ def donation_form_view(request):
 
     return render(request, 'templates/forms/donation_form.html', {'form': form})  # Render the form template
 
-# Handle event participation form
-def event_participation_form_view(request):
-    if request.method == 'POST':
-        form = EventParticipationForm(request.POST)
-        if form.is_valid():
-            form.save()  # Save event participation
-            return redirect('donor_dashboard')  # Redirect to dashboard after submission
-    else:
-        form = EventParticipationForm()  # Display blank form for GET request
-
-    return render(request, 'forms/event_participation_form.html', {'form': form})  # Render the form template
-
-
-# View to handle submission of a Feeding Report
-def create_feeding_report(request):
-    """
-    Display and process the Feeding Report form.
-    On GET: renders an empty form.
-    On POST: validates and saves the report, then redirects to success page.
-    """
-    if request.method == 'POST':
-        form = FeedingReportForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('feeding_report_success')
-    else:
-        form = FeedingReportForm()
-    return render(request, 'foodfund/feeding_report_form.html', {'form': form})
-
-# View to handle creation of a new Event
-def create_event(request):
-    """
-    Display and process the Event creation form.
-    On GET: renders an empty form.
-    On POST: validates and saves the event, then redirects to success page.
-    """
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('event_success')
-    else:
-        form = EventForm()
-    return render(request, 'foodfund/event_form.html', {'form': form})
 
 # Simple success page for Donation submission
 def donation_success(request):
@@ -128,26 +194,8 @@ def event_success(request):
     """
     return render(request, 'foodfund/success.html', {'message': 'Event created successfully!'})
 
-#Takes to home page
-def homepage(request):
-    return render(request, 'forms/nourished.html')
-
-#About Us Page
-def about_us(request):
-    return render(request, 'forms/nourished.html')
-
-#Impact Page
-def impact(request):
-    return render(request, 'forms/nourished.html')
 
 
 
 
-
-
-def register_school(request):
-    return render(request, 'forms/register_school.html')
-
-def submit_feeding_report(request):
-    return render(request, 'forms/submit_feeding_report.html')
 

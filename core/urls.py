@@ -11,13 +11,7 @@ urlpatterns = [
 
     # Donation form view
     path('donate/', views.donation_form_view, name='donation_form'),
-
-    # Event participation form view
-    path('join-event/', views.event_participation_form_view, name='event_participation_form'),
-
-    # Feeding report form page - shows form and handles submission
-    path('feeding-report/', views.create_feeding_report, name='create_feeding_report'),
-
+    
     # Feeding report success page
     path('feeding-report/success/', views.feeding_report_success, name='feeding_report_success'),
 
@@ -48,9 +42,25 @@ urlpatterns = [
     #Parent dashboard view
     path('parent-dashboard/', views.parent, name='parent'),
 
+    #Parent dashboard view
+    path('register-child/', views.register_child, name='register_child'),
+
+    #Community Agent is able to register a school
     path('register-school/', views.register_school, name='register_school'),
     
-    path('submit_feeding_report/', views.submit_feeding_report, name='submit_feeding_report'),
+    #Community Agent submits these reports
+    path('feeding-report/', views.submit_feeding_report, name='submit_feeding_report'),
+
+    #Link to Attendace form
+    path('attendance/', views.attendance, name='attendance'),
+
+    #School Admin/Teacher creates the reports
+    path('create-feeding-report/', views.create_feeding_report, name='create_feeding_report'),
+
+    #View of the event participation
+    path('join-an-event/', views.join_an_event, name='join_an_event'),
+
+
 
 
 ]

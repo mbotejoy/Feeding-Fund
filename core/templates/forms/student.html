@@ -7,25 +7,16 @@
 <body>
 <div class="container mt-4">
   <h2>Register Student</h2>
-  <form>
-    <div class="mb-3">
-      <label class="form-label">Student Full Name</label>
-      <input type="text" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Grade</label>
-      <input type="number" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">School</label>
-      <select class="form-control">
-        <option>Select School</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Parent</label>
-      <input type="text" class="form-control">
-    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Register Student</button>
   </form>
 </div>

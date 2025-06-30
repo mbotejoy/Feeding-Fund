@@ -14,6 +14,7 @@ class Role(models.Model):
 
     def __str__(self):
         return self.get_name_display()  # shows human-readable label
+    
 
 # Custom user model 
 class User(models.Model):
@@ -23,19 +24,19 @@ class User(models.Model):
     password = models.CharField(max_length=128)               # Password (should be hashed)
     created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of user creation
 
-    def _str_(self):
-        return self.full_name
+    def __str__(self):
+     return self.full_name
 
 # Represents a school participating in the program
 class School(models.Model):
-    school_name = models.CharField(max_length=255)            # Name of the school
-    location = models.CharField(max_length=255)               # Physical location
-    email = models.EmailField()                               # Contact email
-    phone_number = models.CharField(max_length=20)            # Contact phone number
-    created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of school entry
+    school_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    def _str_(self):
-        return self.school_name
+    def __str__(self):
+        return self.school_name 
 
 # Represents a student enrolled in a school
 class Student(models.Model):
@@ -44,8 +45,9 @@ class Student(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
     parent = models.ForeignKey(User, on_delete=models.CASCADE)    # Parent or guardian (User)
 
-    def _str_(self):
-        return self.full_name
+
+    def __str__(self):
+     return self.full_name
 
 # Records a donation made by a user to a school
 class Donation(models.Model):
@@ -56,12 +58,14 @@ class Donation(models.Model):
 
 # Report on the feeding program at a school
 class FeedingReport(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)      # User submitting the report
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # School being reported on
+    user = models.CharField(max_length=255)      # User submitting the report
+    school = models.CharField(max_length=255)  # School being reported on
     report_date = models.DateField()                              # Date of the report
     meals_received = models.IntegerField()                        # Number of meals received
     meals_served = models.IntegerField()                          # Number of meals served
     comments = models.TextField(blank=True)                       # Additional comments (optional)
+    def __str__(self):
+        return f"Report for {self.school} on {self.report_date}"
 
 # User feedback about the system or program
 class Feedback(models.Model):
@@ -74,17 +78,18 @@ class Event(models.Model):
     title = models.CharField(max_length=255)                      # Event title
     description = models.TextField()                              # Event description
     event_date = models.DateField()                               # Date of the event
-    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
+    school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school;This tells Django: each event is linked to a single school.
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)# User who created the event
     created_at = models.DateTimeField(auto_now_add=True)          # Timestamp of event creation
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 # Tracks which users (donors) participate in which events
 class EventParticipation(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)    # Event participated in
     donor = models.ForeignKey(User, on_delete=models.CASCADE)     # Donor participating
+
 
 # Records student attendance for a particular date
 class Attendance(models.Model):
