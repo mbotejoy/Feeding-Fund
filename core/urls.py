@@ -47,8 +47,8 @@ urlpatterns = [
 
     path('register-school/', views.register_school, name='register_school'),
     
-    # Feeding report form page - shows form and handles submission
-    path('feeding-report/', views.create_feeding_report, name='create_feeding_report'),
+    #Community Agent submits these reports
+    path('feeding-report/', views.submit_feeding_report, name='submit_feeding_report'),
 
 
 

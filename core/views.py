@@ -27,7 +27,7 @@ def signup(request):
         return render(request, 'forms/user.html', {'form': form})
     
     #View of the submission of a feeding report
-def create_feeding_report(request):
+def submit_feeding_report(request):
     if request.method == 'POST':
         form = FeedingReportForm(request.POST)
         if form.is_valid():
