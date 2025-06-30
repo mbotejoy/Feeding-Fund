@@ -45,8 +45,9 @@ class Student(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
     parent = models.ForeignKey(User, on_delete=models.CASCADE)    # Parent or guardian (User)
 
-    def _str_(self):
-        return self.full_name
+
+    def __str__(self):
+     return self.full_name
 
 # Records a donation made by a user to a school
 class Donation(models.Model):

@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm)
-from .models import (Donation, FeedingReport, Event, User, School,Role,Student)
+from .forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm)
+from .models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance)
 
 
 
@@ -38,6 +38,7 @@ def submit_feeding_report(request):
         form = FeedingReportForm()
     return render(request, 'forms/feeding_report.html', {'form': form})
 
+#View to handle registering of a school
 def register_school(request):
     if request.method == 'POST':
         form = SchoolForm(request.POST)
@@ -73,6 +74,18 @@ def register_child(request):
     else:
         form = StudentForm()
     return render(request, 'forms/student.html', {'form': form})
+
+# View to handle attendance
+def attendance(request):
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Recorded Student Attendance Successfully!")
+            return redirect('school_admin')
+    else:
+        form = AttendanceForm()
+    return render(request, 'forms/attendance.html', {'form': form})
 
 
 

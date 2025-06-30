@@ -54,6 +54,9 @@ urlpatterns = [
     #Community Agent submits these reports
     path('feeding-report/', views.submit_feeding_report, name='submit_feeding_report'),
 
+    #Link to Attendace form
+    path('attendance/', views.attendance, name='attendance'),
+
 
 
 
