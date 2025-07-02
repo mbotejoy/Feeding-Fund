@@ -1,5 +1,5 @@
 {% load static %}
-<!--tag is used to link to static files like CSS or JS-->
+<!-- tag is used to link to static files like CSS or JS -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,24 +20,23 @@
 
 <body>
 
-<!-- Navbar -->
+<!-- ================= NAVBAR ================= -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
     <a class="navbar-brand" href="#">
       <img src="{% static 'Images/Logo1.png' %}" alt="Logo" width="120">
     </a>
     <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished by Joy and Grace</span>
-
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
         <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
+        <!-- Login Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm ml-2" href="#" id="loginDropdown" data-toggle="dropdown">
             Login As
@@ -54,20 +53,20 @@
   </div>
 </nav>
 
-      {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
-     {% endif %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+{% endif %}
 
-<!-- Home page -->
-<section id="home" class="homepage bg-light"
+<!-- =============== HOME PAGE SECTION =============== -->
+<section id="home" class="homepage bg-light">
   <div class="container mt-5">
     <div class="row align-items-center">
-      <!-- Left Section -->
+      <!-- Left Section: Donation Card -->
       <div class="col-md-6 mb-4">
         <div class="card shadow">
-          <img src="{% static 'Images/ChildrenEating.jpeg' %} " class="card-img-top" alt="Children eating" width="120">
+          <img src="{% static 'Images/ChildrenEating.jpeg' %}" class="card-img-top" alt="Children eating" width="120">
           <div class="card-body">
             <h5 class="card-title">Help Feed a Child Today</h5>
             <p class="card-text">Your donation can give a child a healthy start and support their education.</p>
@@ -75,8 +74,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Right Section -->
+      <!-- Right Section: Mission Statement -->
       <div class="col-md-6">
         <h2 class="text-dark font-weight-bold">Our Mission</h2>
         <p>
@@ -90,115 +88,112 @@
   </div>
 </section>
 
-<!-- About Us page-->
+<!-- =============== ABOUT US SECTION =============== -->
 <section id="about" class="aboutus bg-white">
   <h2 class="mt-3">About Us page</h2>
-<hr>
-<div class="container border rounded p-4 bg-white">
-  <div class="row">
-    <!-- Left Section: Images and Captions -->
-    <div class="col-md-6">
-      <div class="row mb-3">
-        <div class="col-6">
-          <div class="card text-center mb-3">
-            <div class="card-header bg-light font-weight-bold">Joy</div>
-            <div class="card-body bg-light">
-              <!-- Placeholder image -->
-              <img src="{%static 'Images/JoyPhoto.jpg' %}" alt="Joy" class="img-fluid" style="min-height:100px; max-height:120px;">
+  <hr>
+  <div class="container border rounded p-4 bg-white">
+    <div class="row">
+      <!-- Left Section: Images and Captions -->
+      <div class="col-md-6">
+        <div class="row mb-3">
+          <div class="col-6">
+            <div class="card text-center mb-3">
+              <div class="card-header bg-light font-weight-bold">Joy</div>
+              <div class="card-body bg-light">
+                <img src="{%static 'Images/JoyPhoto.jpg' %}" alt="Joy" class="img-fluid" style="min-height:100px; max-height:120px;">
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card text-center mb-3">
+              <div class="card-header bg-light font-weight-bold">Grace</div>
+              <div class="card-body bg-light">
+                <img src="{%static 'Images/PassportPhoto.jpg' %}" alt="Grace" class="img-fluid" style="min-height:100px; max-height:120px;">
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-6">
-          <div class="card text-center mb-3">
-            <div class="card-header bg-light font-weight-bold">Grace</div>
-            <div class="card-body bg-light">
-              <!-- Placeholder image -->
-              <img src="{%static 'Images/PassportPhoto.jpg' %}" alt="Grace" class="img-fluid" style="min-height:100px; max-height:120px;">
-            </div>
+        <div class="card text-center">
+          <div class="card-header bg-light font-weight-bold">Volunteers giving school meals</div>
+          <div class="card-body bg-light">
+            <img src="{% static 'Images/VolunteersGivingMeals.jpeg' %}" alt="Volunteers" class="img-fluid" style="min-height:100px; max-height:120px;">
           </div>
         </div>
       </div>
-      <div class="card text-center">
-        <div class="card-header bg-light font-weight-bold">Volunteers giving school meals</div>
-        <div class="card-body bg-light">
-          <!-- Placeholder image -->
-          <img src="{% static 'Images/VolunteersGivingMeals.jpeg' %}" alt="Volunteers" class="img-fluid" style="min-height:100px; max-height:120px;">
-        </div>
+      <!-- Right Section: About Us Text -->
+      <div class="col-md-6">
+        <h4 class="text-center mb-3">About Us</h4>
+        <p>
+          At <strong>Nourished by Joy and Grace</strong> we believe that no child should go to school hungry.
+        </p>
+        <p>
+          Our journey began during our Service Based Learning (SBL) program at a public primary school. There, we observed how the school used the Tap2Eat system to provide meals to students. While the initiative was impactful, it had limitations only one meal was offered per day, and many children couldn’t afford even that. It was heartbreaking to see learners struggle with hunger, which directly affected their concentration, energy, and overall well-being.
+        </p>
+        <p>
+          This experience inspired us to create a food funding platform that goes beyond basic meal provision. We envisioned a system that not only connects donors directly with needy families but also ensures transparency, tracks donations in real time, and empowers communities to take part in the solution.
+        </p>
+        <p>
+          Our platform supports donors, parents, teachers and community agents, working together to fight food insecurity in schools. Through role-based access and smart integration tools like M-Pesa, we ensure every child has the opportunity to receive consistent and nutritious meals not just once, but throughout their school day.
+        </p>
+        <p>
+          We're committed to accountability, inclusivity, and impact because feeding children isn’t just about food, it’s about feeding hope and opportunity.
+        </p>
+        <p>
+          <strong>Together, we can feed futures.</strong>
+        </p>
       </div>
-    </div>
-    <!-- Right Section: About Us Text -->
-    <div class="col-md-6">
-      <h4 class="text-center mb-3">About Us</h4>
-      <p>
-        At <strong>Nourished by Joy and Grace</strong> we believe that no child should go to school hungry.
-      </p>
-      <p>
-        Our journey began during our Service Based Learning (SBL) program at a public primary school. There, we observed how the school used the Tap2Eat system to provide meals to students. While the initiative was impactful, it had limitations only one meal was offered per day, and many children couldn’t afford even that. It was heartbreaking to see learners struggle with hunger, which directly affected their concentration, energy, and overall well-being.
-      </p>
-      <p>
-        This experience inspired us to create a food funding platform that goes beyond basic meal provision. We envisioned a system that not only connects donors directly with needy families but also ensures transparency, tracks donations in real time, and empowers communities to take part in the solution.
-      </p>
-      <p>
-        Our platform supports donors, parents, teachers and community agents, working together to fight food insecurity in schools. Through role-based access and smart integration tools like M-Pesa, we ensure every child has the opportunity to receive consistent and nutritious meals not just once, but throughout their school day.
-      </p>
-      <p>
-        We're committed to accountability, inclusivity, and impact because feeding children isn’t just about food, it’s about feeding hope and opportunity.
-      </p>
-      <p>
-        <strong>Together, we can feed futures.</strong>
-      </p>
     </div>
   </div>
-</div>
 </section>
 
-<!-- Imapct Page-->
- <section id="impact" class="ourimpact bg-white">
+<!-- =============== IMPACT SECTION =============== -->
+<section id="impact" class="ourimpact bg-white">
   <h2 class="mt-3">Our Impact Page</h2>
-<hr>
-<h3 class="text-center my-4">Our Impact</h3>
-<hr>
-
-<div class="container">
-  <div class="row justify-content-center mb-4">
-    <div class="col-md-6 d-flex justify-content-center mb-3">
-      <div class="card h-100 w-100">
-        <div class="card-header bg-light font-weight-bold text-center">School lunch being served</div>
-        <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
-          <img src="{% static 'Images/MealsBeingServed.jpg' %}" alt="School lunch being served" class="img-fluid">
+  <hr>
+  <h3 class="text-center my-4">Our Impact</h3>
+  <hr>
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6 d-flex justify-content-center mb-3">
+        <div class="card h-100 w-100">
+          <div class="card-header bg-light font-weight-bold text-center">School lunch being served</div>
+          <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+            <img src="{% static 'Images/MealsBeingServed.jpg' %}" alt="School lunch being served" class="img-fluid">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex justify-content-center mb-3">
+        <div class="card h-100 w-100">
+          <div class="card-header bg-light font-weight-bold text-center">Children eating the meals</div>
+          <div class="card-body d-flex align-items-center justify-content-center" style="min-height:180px;">
+            <img src="{%static 'Images/Children_eating_image.webp' %}" alt="Children eating the meals" class="img-fluid" style="max-width:320px; width:100%; height:auto; object-fit:cover;">
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6 d-flex justify-content-center mb-3">
-      <div class="card h-100 w-100">
-        <div class="card-header bg-light font-weight-bold text-center">Children eating the meals</div>
-        <div class="card-body d-flex align-items-center justify-content-center" style="min-height:180px;">
-          <img src="{%static 'Images/Children_eating_image.webp' %}" alt="Children eating the meals" class="img-fluid" style="max-width:320px; width:100%; height:auto; object-fit:cover;">
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6 d-flex justify-content-center mb-3">
+        <div class="card h-100 w-100">
+          <div class="card-header bg-light font-weight-bold text-center">Smiling children after meals</div>
+          <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+            <img src="{%static 'Images/Children_smiling.jpeg' %}" alt="Smiling children after meals" class="img-fluid">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex justify-content-center mb-3">
+        <div class="card h-100 w-100">
+          <div class="card-header bg-light font-weight-bold text-center">Donors serving meals</div>
+          <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
+            <img src="{%static 'Images/donor_servingfood.jpeg' %}" alt="Donors serving meals" class="img-fluid">
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="row justify-content-center mb-4">
-    <div class="col-md-6 d-flex justify-content-center mb-3">
-      <div class="card h-100 w-100">
-        <div class="card-header bg-light font-weight-bold text-center">Smiling children after meals</div>
-        <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
-          <img src="{%static 'Images/Children_smiling.jpeg' %}" alt="Smiling children after meals" class="img-fluid">
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 d-flex justify-content-center mb-3">
-      <div class="card h-100 w-100">
-        <div class="card-header bg-light font-weight-bold text-center">Donors serving meals</div>
-        <div class="card-body d-flex align-items-center justify-content-center" style="min-height:120px;">
-          <img src="{%static 'Images/donor_servingfood.jpeg' %}" alt="Donors serving meals" class="img-fluid">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+</section>
 
-<!-- EVENTS TABLE CONTAINER STARTS HERE -->
+<!-- =============== EVENTS TABLE SECTION =============== -->
 <div class="container mt-5 d-flex justify-content-center">
   <div class="w-100" style="max-width:900px;">
     <h3 class="mb-4">Upcoming School Events</h3>
@@ -240,19 +235,20 @@
     </div>
   </div>
 </div>
-<!-- Feedback Button -->
+
+<!-- =============== FEEDBACK BUTTON =============== -->
 <div class="container d-flex justify-content-center my-4">
   <button class="btn rounded-pill" style="background-color:#f8bbd0; color:#fff; font-weight:600; padding:12px 36px; font-size:1.1rem;">Give Feedback</button>
 </div>
+
+<!-- =============== SCRIPTS =============== -->
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-
 <script>
   $(document).ready(function() {
     $('#eventsTable').DataTable({
@@ -268,12 +264,12 @@
   });
 </script>
 
-<!-- Footer -->
+<!-- =============== FOOTER =============== -->
 <footer class="bg-light mt-5 p-3 text-center text-muted">
   &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
 </footer>
 
-<!-- Bootstrap JS -->
+<!-- Bootstrap JS (for legacy support) -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
