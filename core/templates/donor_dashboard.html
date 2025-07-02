@@ -61,32 +61,19 @@
         {% endfor %}
       {% endif %}
     
-      <div class="dashboard-buttons mt-4">
-        <a href="donation-form.html" class="btn btn-primary">Donate Funds</a>
-        <a href="donation-history.html" class="btn btn-outline-secondary">View Donation History</a>
-        <a href="{% url 'join_an_event' %}" class="btn btn-info text-white">Join an Event</a>
+      <div class="dashboard-buttons mt-4 d-flex flex-column">
+        <a href="donation-form.html" class="btn mb-2 rounded-pill" style="background-color:#007bff; color:white;">Donate Funds</a>
+        <a href="donation-history.html" class="btn mb-2 rounded-pill" style="background-color:#28a745; color:white;">View Donation History</a>
+        <a href="{% url 'join_an_event' %}" class="btn rounded-pill" style="background-color:#f8f9fa; color:#343a40; border:1px solid #ced4da;">Join an Event</a>
       </div>
     </div>
 
     <div class="dashboard-img-section">
-        <img src="{% static 'Images/thank-you-for-donation-1.jpg' %}" alt="Donor Impact" width="500" />
+        <img src="{% static 'Images/thanks-for-your-donations.jpg' %}" alt="Donor Impact" width="500" />
       </div>
 
-    <!-- Right: Stats and Chart -->
-    <div class="col-lg-6 dashboard-right">
-      <div class="donation-stats mb-4">
-        <p class="stats-title">Donation Statistics</p>
-        <div class="progress-container">
-          <span>Goal: $5,000</span>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progressBar"></div>
-          </div>
-          <span id="progressValue">$3,500 raised</span>
-        </div>
-        <canvas id="donationChart" width="150" height="100"></canvas>
-      </div>
-      
-    </div>
+    
+    
   </div>
 
 <!-- Footer -->
@@ -94,6 +81,9 @@
   &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
 </footer>
 
+  <!-- Bootstrap JS (required for navbar toggling) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="styles.css/donor.js"></script>
 </body>
 </html>
