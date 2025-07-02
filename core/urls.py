@@ -2,25 +2,16 @@ from django.urls import path
 from . import views  # Import views from the same app(core)
 
 urlpatterns = [
-   
-    # Donation success page - shows after a successful donation
-    path('donate/success/', views.donation_success, name='donation_success'),
 
     #Donor dashboard view
     path('donor-dashboard/', views.donor_dashboard, name='donor_dashboard'),
 
     # Donation form view
     path('donate/', views.donation_form_view, name='donation_form'),
-    
-    # Feeding report success page
-    path('feeding-report/success/', views.feeding_report_success, name='feeding_report_success'),
 
     # Event creation form page - shows form and handles submission
     path('event/create/', views.create_event, name='create_event'),
-
-    # Event success page
-    path('event/success/', views.event_success, name='event_success'),
-
+    
     #This is for the homepage
     path('', views.homepage, name='homepage'),
 
@@ -32,6 +23,9 @@ urlpatterns = [
 
     # Link for the signup page
     path('signup/', views.signup, name='signup'),
+
+    # Link for the login page
+    path('login/', views.login, name='login'),
 
     # Link for the School Admin Dashboard 
     path('school_admin-dashboard/', views.school_admin, name='school_admin'),
@@ -59,6 +53,12 @@ urlpatterns = [
 
     #View of the event participation
     path('join-an-event/', views.join_an_event, name='join_an_event'),
+
+    path('attendance_records/', views.attendance_records, name='attendance_records'),
+
+        # Edit and Delete routes for attendance records
+    path('attendance/edit/<int:record_id>/', views.edit_attendance, name='edit_attendance'),
+    path('attendance/delete/<int:record_id>/', views.delete_attendance, name='delete_attendance'),
 
 
 

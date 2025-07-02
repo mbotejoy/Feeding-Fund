@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 
 
@@ -17,12 +18,18 @@ class Role(models.Model):
     
 
 # Custom user model 
-class User(models.Model):
+class User(AbstractBaseUser, PermissionsMixin):
     role = models.ForeignKey(Role, on_delete=models.CASCADE)  # User's role
     full_name = models.CharField(max_length=255)              # Full name of the user
     email = models.EmailField(unique=True)                    # Unique email address
     password = models.CharField(max_length=128)               # Password (should be hashed)
     created_at = models.DateTimeField(auto_now_add=True)      # Timestamp of user creation
+
+    is_active = models.BooleanField(default=True)               #Determines if user account is active
+    is_staff = models.BooleanField(default=False)               #Determines if user can access the Django admin site
+    last_login = models.DateTimeField(null=True, blank=True)    #Stores the timestamp of the user's last successful login.
+
+    USERNAME_FIELD = 'email'  # Use email for login
 
     def __str__(self):
      return self.full_name
@@ -94,5 +101,8 @@ class EventParticipation(models.Model):
 # Records student attendance for a particular date
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE) # Student
-    attendance = models.BooleanField()                             # Present (True) or absent (False)
+    attendance = models.CharField(max_length=255)                             # Present (True) or absent (False)
     attendance_date = models.DateField()                           # Date of attendance
+
+    def __str__(self):
+     return f"{self.student.full_name} - {self.attendance_date}"
