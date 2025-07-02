@@ -54,6 +54,9 @@ urlpatterns = [
     #View of the event participation
     path('join-an-event/', views.join_an_event, name='join_an_event'),
 
+    #View of the feedback form
+    path('feedback/', views.give_feedback, name='give_feedback'),
+
     path('attendance_records/', views.attendance_records, name='attendance_records'),
 
         # Edit and Delete routes for attendance records

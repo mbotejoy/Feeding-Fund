@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm)
+from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm)
 from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance)
 
 
@@ -159,6 +159,19 @@ def join_an_event(request):
         form = EventParticipationForm()  # Display blank form for GET request
 
     return render(request, 'forms/event_participation.html', {'form': form})  # Render the form template
+
+# Handles Feedback form
+def give_feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save feedback
+            messages.success(request, "Feedback Sent Successfully!")
+            return redirect('homepage')  # Redirect to dashboard after submission
+    else:
+        form = FeedbackForm()  # Display blank form for GET request
+
+    return render(request, 'forms/feedback.html', {'form': form})  # Render the form template
 
 
 
