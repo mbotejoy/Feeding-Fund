@@ -1,0 +1,25 @@
+/* signup.css */
+
+.form-outer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 65vh;
+}
+
+.form-inner-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem 2rem 2rem;
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.10), 8px 8px 24px rgba(33, 150, 243, 0.12);
+  /* Right and bottom shadow emphasis */
+  max-width: 430px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .form-inner-card {
+    padding: 1.2rem 0.5rem;
+    max-width: 98vw;
+  }
+}
