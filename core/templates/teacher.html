@@ -70,6 +70,39 @@
       </div>
     </div>
   </div>
+  <!-- ========== ATTENDANCE TABLE SECTION ========== -->
+<div class="container mt-5">
+  <h3 class="mb-4">Attendance Records</h3>
+  <div class="table-responsive shadow rounded">
+    <table class="table table-striped table-hover align-middle" id="attendanceTable">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in attendance_records %}
+      <tr>
+        <td>{{ record.student.full_name }}</td>
+        <td>{{ record.attendance_date }}</td>
+        <td>{{ record.attendance }}</td>
+        <td>
+          {% if record.id %}
+            <a href="{% url 'edit_attendance' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+            <a href="{% url 'delete_attendance' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          {% else %}
+            <span class="text-danger">No Id</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+    </table>
+  </div>
+</div>
 
   <!-- Footer -->
   <footer class="bg-light mt-5 p-3 text-center text-muted">

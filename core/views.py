@@ -183,15 +183,24 @@ def donor_dashboard(request):
 # Show the community_agent dashboard
 @login_required
 def communityagent_dashboard(request):
-    attendance_records = Attendance.objects.all()
-    return render(request, 'communityagent_dashboard.html', {
-        'attendance_records': attendance_records
-    })
+    student_records = Student.objects.all()
+    events = Event.objects.all()
+
+    context = {
+        'student_records': student_records,
+        'events': events
+    }
+
+    return render(request, 'communityagent_dashboard.html', context)
+
 
 # Show the school admin dashboard
 @login_required
 def school_admin(request):
-    return render(request, 'teacher.html')
+    attendance_records = Attendance.objects.all()
+    return render(request, 'teacher.html', {
+        'attendance_records': attendance_records
+    })
 
 # Show the parent dashboard
 @login_required
@@ -201,7 +210,9 @@ def parent(request):
 
 #Takes to home page
 def homepage(request):
-    return render(request, 'forms/nourished.html')
+        events = Event.objects.all()  # Fetch all events
+        return render(request, 'forms/nourished.html', {'events': events})
+
 
 #About Us Page
 def about_us(request):
@@ -260,9 +271,66 @@ def delete_attendance(request, record_id):
         messages.success(request, "Attendance record deleted.")
         return redirect('communityagent_dashboard')
 
-    # Optional confirmation page (or delete instantly if you prefer)
+    # Optional confirmation page 
     return render(request, 'forms/confirm_delete.html', {'record': record})
 
+
+def events_table(request):
+    events = Event.objects.all()
+    return render(request, 'forms/nourished.html', {'events': events})
+
+def edit_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('homepage')  # Or wherever your event list is shown
+    else:
+        form = EventForm(instance=event)
+
+    return render(request, 'forms/edit_event.html', {'form': form, 'event': event})
+
+# View to delete a single attendance record
+def delete_event(request, event_id):
+    record = get_object_or_404(Event, id=event_id)  # Get record or 404
+    if request.method == 'POST':
+        record.delete()  # Delete the record
+        messages.success(request, "Event deleted Successfully.")
+        return redirect('homepage')
+
+    # Optional confirmation page 
+    return render(request, 'forms/confirm_delete.html', {'record': record})
+
+# View to edit student records
+def edit_student_record(request, record_id):
+    # Get the attendance record or return 404 if not found
+    record = get_object_or_404(Student, id=record_id)
+
+    if request.method == 'POST':
+        # If form submitted, populate it with POST data and the instance
+        form = StudentForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()  # Save the updated record
+            messages.success(request, "Student record updated successfully.")
+            return redirect('communityagent_dashboard')  # Redirect back to dashboard
+    else:
+        # If GET request, display the form with the current record
+        form = AttendanceForm(instance=record)
+
+    # Render edit page
+    return render(request, 'forms/edit_student.html', {'form': form})
+
+# View to delete student record
+def delete_student_record(request, record_id):
+    record = get_object_or_404(Student, id=record_id)  # Get record or 404
+    if request.method == 'POST':
+        record.delete()  # Delete the record
+        messages.success(request, "Event deleted Successfully.")
+        return redirect('communityagent_dashboard')
+
+    # Optional confirmation page 
+    return render(request, 'forms/delete_student.html', {'record': record})
 
 
 

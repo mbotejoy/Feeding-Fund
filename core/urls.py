@@ -16,10 +16,10 @@ urlpatterns = [
     path('', views.homepage, name='homepage'),
 
     #This is for the About Us page
-    path('', views.about_us, name='about_us'),
+    path('about-us/', views.about_us, name='about_us'),
 
     #This is for the Impact page
-    path('', views.impact, name='impact'),
+    path('impact/', views.impact, name='impact'),
 
     # Link for the signup page
     path('signup/', views.signup, name='signup'),
@@ -62,6 +62,18 @@ urlpatterns = [
         # Edit and Delete routes for attendance records
     path('attendance/edit/<int:record_id>/', views.edit_attendance, name='edit_attendance'),
     path('attendance/delete/<int:record_id>/', views.delete_attendance, name='delete_attendance'),
+
+    path('events/table/', views.events_table, name='events_table'),
+
+    path('events/edit/<int:event_id>/', views.edit_event, name='edit_event'),
+    path('events/delete/<int:event_id>/', views.delete_event, name='delete_event'),
+
+            # Edit and Delete routes for student records
+    path('student/edit/<int:record_id>/', views.edit_student_record, name='edit_student_record'),
+    path('student/delete/<int:record_id>/', views.delete_student_record, name='delete_student_record'),
+
+
+
 
 
 
