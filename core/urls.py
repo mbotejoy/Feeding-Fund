@@ -25,7 +25,9 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
 
     # Link for the login page
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
+
+    path('logout/', views.logout_view, name='logout'),
 
     # Link for the School Admin Dashboard 
     path('school_admin-dashboard/', views.school_admin, name='school_admin'),

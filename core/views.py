@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate,logout, login as auth_login
 from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
@@ -30,7 +30,7 @@ def signup(request):
     
 
 #login view    
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         # Get the submitted values from the login form
         email = request.POST.get('username')  # full name field used as username
@@ -72,6 +72,11 @@ def login(request):
 
     # If GET request, show the login form
     return render(request, 'forms/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('homepage')  # This sends the user back to the login page
     
 #View of the submission of a feeding report
 def submit_feeding_report(request):
