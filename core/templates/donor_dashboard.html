@@ -63,7 +63,7 @@
       {% endif %}
     
       <div class="dashboard-buttons mt-4 d-flex flex-column">
-        <a href="donation-form.html" class="btn mb-2 rounded-pill" style="background-color:#007bff; color:white;">Donate Funds</a>
+        <a href="{% url 'donation_form' %}" class="btn mb-2 rounded-pill" style="background-color:#007bff; color:white;">Donate Funds</a>
         <a href="donation-history.html" class="btn mb-2 rounded-pill" style="background-color:#28a745; color:white;">View Donation History</a>
         <a href="{% url 'join_an_event' %}" class="btn rounded-pill" style="background-color:#f8f9fa; color:#343a40; border:1px solid #ced4da;">Join an Event</a>
       </div>

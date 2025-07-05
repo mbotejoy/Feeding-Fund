@@ -1,5 +1,11 @@
 from django.http import HttpResponse
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+import base64
+#import requests
+from django.conf import settings
+from django.http import JsonResponse
 from django.contrib.auth import authenticate,logout, login as auth_login
 from django.contrib.auth.hashers import make_password 
 from django.contrib.auth.hashers import check_password
@@ -230,16 +236,22 @@ def impact(request):
 
 
 # Handle donation form
-def donation_form_view(request):
+def donation_form(request):
+    schools = School.objects.all()
+
     if request.method == 'POST':
         form = DonationForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the donation to the database
-            return redirect('donor_dashboard')  # Redirect after successful submission
+            # process the donation form
+            form.save()
+            # or redirect to success page
     else:
-        form = DonationForm()  # Create an empty form for GET request
+        form = DonationForm()  # ← This is missing in your code!
 
-    return render(request, 'templates/forms/donation_form.html', {'form': form})  # Render the form template
+    return render(request, 'forms/donation_form.html', {
+        'form': form,
+        'schools': schools
+    })
 
 def attendance_records(request):
     # Fetch all attendance records from the database
@@ -336,6 +348,56 @@ def delete_student_record(request, record_id):
 
     # Optional confirmation page 
     return render(request, 'forms/delete_student.html', {'record': record})
+
+def get_access_token():
+    url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    response = requests.get(url, auth=(settings.MPESA_CONSUMER_KEY, settings.MPESA_CONSUMER_SECRET))
+    return response.json()['access_token']
+
+#Mpesa Integration
+@csrf_exempt
+def stk_push(request):
+    if request.method == 'POST':
+        phone = request.POST.get('phone')
+        amount = request.POST.get('amount')
+        donor_name = request.POST.get('donor_name')
+        school = request.POST.get('school')
+
+        # Format phone
+        if phone.startswith('0'):
+            phone = phone.replace('0', '254', 1)
+
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        password = base64.b64encode((settings.MPESA_SHORTCODE + settings.MPESA_PASSKEY + timestamp).encode()).decode()
+
+        payload = {
+            "BusinessShortCode": settings.MPESA_SHORTCODE,
+            "Password": password,
+            "Timestamp": timestamp,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": settings.MPESA_SHORTCODE,
+            "PhoneNumber": phone,
+            "CallBackURL": settings.MPESA_CALLBACK_URL,
+            "AccountReference": school,
+            "TransactionDesc": f"Donation by {donor_name} to {school}"
+        }
+
+        headers = {
+            "Authorization": f"Bearer {get_access_token()}",
+            "Content-Type": "application/json"
+        }
+
+        url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+        response = requests.post(url, json=payload, headers=headers)
+
+        return render(request, "donation_success.html", {"response": response.json()})
+    
+@csrf_exempt
+def mpesa_callback(request):
+    print("Callback received:", request.body)
+    return JsonResponse({"status": "received"})
 
 
 

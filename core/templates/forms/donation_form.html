@@ -66,32 +66,35 @@
 
 <div class="container mt-5">
   <h2 class="mb-4 text-center">Make a Donation</h2>
-  <form>
-    <div class="form-outer-container">
-      <label class="form-label">Donor Name</label>
-      <input type="text" class="form-control">
+<form method="POST" action="{% url 'stk_push' %}">
+  {% csrf_token %}
+  <div class="form-outer-container">
+    <div class="form-inner-card">
+      <div class="mb-3">
+        <label class="form-label">Donor Name</label>
+        <input type="text" class="form-control" name="donor_name" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone Number (07...)</label>
+        <input type="text" class="form-control" name="phone" placeholder="07XXXXXXXX" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Amount (KES)</label>
+        <input type="number" class="form-control" name="amount" required>
+      </div>
+<div class="mb-3">
+  <label class="form-label">Select School</label>
+  <select class="form-control" name="school">
+    {% for school in schools %}
+      <option value="{{ school.id }}">{{ school.name }}</option>
+    {% endfor %}
+  </select>
+</div>
+      <input type="hidden" name="method" value="mpesa">
+      <button type="submit" class="btn btn-success">Donate via M-Pesa</button>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Amount (KES)</label>
-      <input type="number" class="form-control" step="0.01">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Select School</label>
-      <select class="form-control">
-        <option>School A</option>
-        <option>School B</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Payment method</label>
-      <select id="method" name="method">
-      <option >Credit Card</option>
-      <option >PayPal</option>
-      <option >M-Pesa</option>
-    </select>
-    </div>
-    <button type="submit" class="btn btn-success">Donate</button>
-  </form>
+  </div>
+</form>
 </div>
 <!-- Footer -->
   <footer class="bg-light mt-5 p-3 text-center text-muted">

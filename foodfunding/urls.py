@@ -8,9 +8,13 @@ urlpatterns = [
 
     # Include the URLs from your core app
     path('', include('core.urls')),  # Now your core views are accessible via paths like /roles/, /users/, etc.
+
+    path('mpesa/', include('core.urls')),
 ] 
 
 # Serve static files during development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
 

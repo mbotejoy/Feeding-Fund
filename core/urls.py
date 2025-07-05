@@ -7,7 +7,7 @@ urlpatterns = [
     path('donor-dashboard/', views.donor_dashboard, name='donor_dashboard'),
 
     # Donation form view
-    path('donate/', views.donation_form_view, name='donation_form'),
+    path('mpesa/donate/', views.donation_form, name='donation_form'),
 
     # Event creation form page - shows form and handles submission
     path('event/create/', views.create_event, name='create_event'),
@@ -73,6 +73,12 @@ urlpatterns = [
             # Edit and Delete routes for student records
     path('student/edit/<int:record_id>/', views.edit_student_record, name='edit_student_record'),
     path('student/delete/<int:record_id>/', views.delete_student_record, name='delete_student_record'),
+
+    path('stk-push/', views.stk_push, name='stk_push'),
+
+    #Mpesa callback url
+    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
+
 
 
 
