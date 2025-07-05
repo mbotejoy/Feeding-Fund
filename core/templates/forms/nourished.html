@@ -124,24 +124,30 @@
       <!-- Right Section: About Us Text -->
       <div class="col-md-6">
         <h4 class="text-center mb-3">About Us</h4>
-        <p>
-          At <strong>Nourished by Joy and Grace</strong> we believe that no child should go to school hungry.
-        </p>
-        <p>
-          Our journey began during our Service Based Learning (SBL) program at a public primary school. There, we observed how the school used the Tap2Eat system to provide meals to students. While the initiative was impactful, it had limitations only one meal was offered per day, and many children couldn’t afford even that. It was heartbreaking to see learners struggle with hunger, which directly affected their concentration, energy, and overall well-being.
-        </p>
-        <p>
-          This experience inspired us to create a food funding platform that goes beyond basic meal provision. We envisioned a system that not only connects donors directly with needy families but also ensures transparency, tracks donations in real time, and empowers communities to take part in the solution.
-        </p>
-        <p>
-          Our platform supports donors, parents, teachers and community agents, working together to fight food insecurity in schools. Through role-based access and smart integration tools like M-Pesa, we ensure every child has the opportunity to receive consistent and nutritious meals not just once, but throughout their school day.
-        </p>
-        <p>
-          We're committed to accountability, inclusivity, and impact because feeding children isn’t just about food, it’s about feeding hope and opportunity.
-        </p>
-        <p>
-          <strong>Together, we can feed futures.</strong>
-        </p>
+        <div id="aboutShort">
+          <p>
+            At <strong>Nourished by Joy and Grace</strong> we believe that no child should go to school hungry.
+          </p>
+          <p>
+            Our journey began during our Service Based Learning (SBL) program at a public primary school. There, we observed how the school used the Tap2Eat system to provide meals to students. While the initiative was impactful, it had limitations only one meal was offered per day, and many children couldn’t afford even that. It was heartbreaking to see learners struggle with hunger, which directly affected their concentration, energy, and overall well-being.
+          </p>
+          <button class="btn btn-link p-0" id="readMoreBtn">Read More</button>
+        </div>
+        <div id="aboutFull" style="display:none;">
+          <p>
+            This experience inspired us to create a food funding platform that goes beyond basic meal provision. We envisioned a system that not only connects donors directly with needy families but also ensures transparency, tracks donations in real time, and empowers communities to take part in the solution.
+          </p>
+          <p>
+            Our platform supports donors, parents, teachers and community agents, working together to fight food insecurity in schools. Through role-based access and smart integration tools like M-Pesa, we ensure every child has the opportunity to receive consistent and nutritious meals not just once, but throughout their school day.
+          </p>
+          <p>
+            We're committed to accountability, inclusivity, and impact because feeding children isn’t just about food, it’s about feeding hope and opportunity.
+          </p>
+          <p>
+            <strong>Together, we can feed futures.</strong>
+          </p>
+          <button class="btn btn-link p-0" id="readLessBtn">Read Less</button>
+        </div>
       </div>
     </div>
   </div>
@@ -252,6 +258,17 @@
       columnDefs: [
         { orderable: false, targets: 4 } // Disable sorting on Actions column
       ]
+    });
+  });
+  // Read More/Less functionality for About Us
+  $(document).ready(function() {
+    $('#readMoreBtn').click(function() {
+      $('#aboutShort').hide();
+      $('#aboutFull').show();
+    });
+    $('#readLessBtn').click(function() {
+      $('#aboutFull').hide();
+      $('#aboutShort').show();
     });
   });
 </script>
