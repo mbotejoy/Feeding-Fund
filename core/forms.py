@@ -15,16 +15,10 @@ class RoleForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
             # Use PasswordInput widget to mask password input in forms
         password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-        role = forms.ModelChoiceField(
-        queryset=Role.objects.all(),
-        empty_label="Select Role",
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-
 
         class Meta:
          model = User
-         fields = [ 'full_name', 'email', 'password','role']
+         fields = ['full_name', 'email', 'password']  # Exclude 'role' from the form
          widgets = {
             #'role': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for selecting role
             'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full name'}),

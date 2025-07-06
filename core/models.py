@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
 
 
@@ -11,15 +11,41 @@ class Role(models.Model):
         ('Community Agent', 'Community Agent'),
     ]
 
-    name = models.CharField(max_length=50, choices=ROLE_CHOICES, unique=True)
-
+    name = models.CharField(max_length=50)
     def __str__(self):
-        return self.get_name_display()  # shows human-readable label
+        return self.name  # shows human-readable label
     
+
+# Custom manager for User
+#resolves the Django admin login error and allows you to manage users through the admin interface.
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
+    def get_by_natural_key(self, email):
+        return self.get(email=email)
 
 # Custom user model 
 class User(AbstractBaseUser, PermissionsMixin):
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)  # User's role
+    ROLE_CHOICES = (
+        ('Donor', 'Donor'),
+        ('Parent', 'Parent'),
+        ('School Admin', 'School Admin'),
+        ('Community Agent', 'Community Agent'),
+    )
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+
     full_name = models.CharField(max_length=255)              # Full name of the user
     email = models.EmailField(unique=True)                    # Unique email address
     password = models.CharField(max_length=128)               # Password (should be hashed)
@@ -28,8 +54,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)               #Determines if user account is active
     is_staff = models.BooleanField(default=False)               #Determines if user can access the Django admin site
     last_login = models.DateTimeField(null=True, blank=True)    #Stores the timestamp of the user's last successful login.
+    is_verified = models.BooleanField(default=False)             # Determines if the user's email is verified
 
     USERNAME_FIELD = 'email'  # Use email for login
+
+    objects = UserManager()
 
     def __str__(self):
      return self.full_name

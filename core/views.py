@@ -23,8 +23,9 @@ def signup(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.password = make_password(user.password)
+            # Do not set role here; admin will assign role later
             user.save()
-            messages.success(request, 'Registration successful!')
+            messages.success(request, 'Registration successful! Awaiting verification by admin.')
             return redirect('homepage')  # Make sure 'homepage' URL name exists
         else:
             print("FORM ERRORS:", form.errors)
@@ -43,16 +44,22 @@ def login_view(request):
         password = request.POST.get('password')   # Password field
 
         try:
-            # Try to retrieve the user from the database using full_name
+            # Try to retrieve the user from the database using email
             user = User.objects.get(email=email)
 
             # Check if the entered password matches the user's stored hashed password
             if check_password(password, user.password):
-                # If password is correct, log in the user manually
+                if not user.is_verified:
+                    messages.error(request, 'Your account is not verified. Please wait for admin approval.')
+                    return redirect('homepage')
+                if not user.role:
+                    messages.error(request, 'Your account does not have a role assigned. Please contact the admin.')
+                    return redirect('homepage')
+                # If password is correct, user is verified, and has a role, log in the user manually
                 auth_login(request, user)
 
                 # Redirect the user to the appropriate dashboard based on their role
-                role = user.role.name.lower()  # Convert role to lowercase for easier comparison
+                role = user.role.name.lower()
 
                 if role == 'donor':
                     return redirect('donor_dashboard')
@@ -72,8 +79,8 @@ def login_view(request):
                 return redirect('homepage')
 
         except User.DoesNotExist:
-            # If no user with that full name exists, show an error and redirect to homepage
-            messages.error(request, 'User with that name does not exist.')
+            # If no user with that email exists, show an error and redirect to homepage
+            messages.error(request, 'User with that email does not exist.')
             return redirect('homepage')
 
     # If GET request, show the login form
@@ -189,25 +196,31 @@ def give_feedback(request):
 # Show the donor dashboard
 @login_required
 def donor_dashboard(request):
+    if request.user.role.name.lower() != 'donor':
+        messages.error(request, 'Unauthorized access.')
+        return redirect('homepage')
     return render(request, 'donor_dashboard.html')  
 
 # Show the community_agent dashboard
 @login_required
 def communityagent_dashboard(request):
+    if request.user.role.name.lower() != 'community agent':
+        messages.error(request, 'Unauthorized access.')
+        return redirect('homepage')
     student_records = Student.objects.all()
     events = Event.objects.all()
-
     context = {
         'student_records': student_records,
         'events': events
     }
-
     return render(request, 'communityagent_dashboard.html', context)
-
 
 # Show the school admin dashboard
 @login_required
 def school_admin(request):
+    if request.user.role.name.lower() != 'school admin':
+        messages.error(request, 'Unauthorized access.')
+        return redirect('homepage')
     attendance_records = Attendance.objects.all()
     return render(request, 'teacher.html', {
         'attendance_records': attendance_records
@@ -216,6 +229,9 @@ def school_admin(request):
 # Show the parent dashboard
 @login_required
 def parent(request):
+    if request.user.role.name.lower() != 'parents':
+        messages.error(request, 'Unauthorized access.')
+        return redirect('homepage')
     return render(request, 'parent.html')
 
 
