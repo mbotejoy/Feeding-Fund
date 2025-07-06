@@ -86,11 +86,6 @@
         {% csrf_token %}
 
         <div class="mb-3">
-          <label for="{{ form.role.id_for_label }}">Select Role:</label>
-          {{ form.role }}
-        </div>
-
-        <div class="mb-3">
           <label for="id_full_name">Full Name</label>
           {{ form.full_name }}
         </div>

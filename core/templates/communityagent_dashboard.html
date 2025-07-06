@@ -43,8 +43,7 @@
     <!-- Left Column: Welcome and Actions -->
     <div class="col-md-6">
       <h1 class="mb-3">Welcome to Nourished by Joy and Grace Feeding Fund Portal</h1>
-      <pre>{{ user }}</pre>
-      <h3 class="mb-4">Hello, {{ user.get_full_name|default:user.email }}!</h3>
+      <h3 class="mb-4">Hello, {{ user.full_name|default:user.email }}!</h3>
       <p class="lead mb-5">
         Thank you for your dedication. Use the buttons below to register schools, submit feeding reports, and create upcoming events.
       </p>
