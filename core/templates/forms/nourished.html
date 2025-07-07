@@ -36,6 +36,7 @@
         <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
         <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
         <li class="nav-item"><a class="nav-link" href="#impact">Impact</a></li>
+
         <!-- Login Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm ml-2" href="#" id="loginDropdown" data-toggle="dropdown">
@@ -48,6 +49,15 @@
             <a class="dropdown-item" href="{% url 'communityagent_dashboard' %}">Community Agent</a>
           </div>
         </li>
+      <ul class="">
+        <!-- Logout Button (visible if user is authenticated) -->
+        {% if user.is_authenticated %}
+          <li class="nav-item ml-3">
+        <a class="btn btn-danger btn-sm" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% endif %}
+
+      </ul>
       </ul>
     </div>
   </div>

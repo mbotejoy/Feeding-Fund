@@ -40,14 +40,32 @@
 
 </head>
 <body>
-  <div class="container mt-5">
-    <h2>Edit Attendance Record</h2>
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Edit Attendance Record</h2>
+
+  <!-- Centered Form Container -->
+  <div class="form-outer-container">
+    <div class="form-inner-card">
+      <h3 class="text-center mb-4">Edit Attendace Record</h3>
+
+      <!-- Display any messages -->
+      {% if messages %}
+        <div class="alert alert-info">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+  <!-- Start of form -->
+<form method="POST">
+  {% csrf_token %}
+       {{ form.as_p }}
       <button type="submit" class="btn btn-primary">Save Changes</button>
       <a href="{% url 'school_admin' %}" class="btn btn-secondary">Cancel</a>
-    </form>
+  </form>
+  <!-- End of form -->
+</div>
   </div>
 </body>
 </html>
@@ -60,3 +78,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+

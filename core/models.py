@@ -17,7 +17,7 @@ class Role(models.Model):
     
 
 # Custom manager for User
-#resolves the Django admin login error and allows you to manage users through the admin interface.
+#resolves the Django admin login error and allow you to manage users through the admin interface.
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -45,7 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Community Agent', 'Community Agent'),
     )
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
-
+    school = models.ForeignKey('School', on_delete=models.SET_NULL, null=True, blank=True, help_text='Assign a school to this user (for school admins)')
     full_name = models.CharField(max_length=255)              # Full name of the user
     email = models.EmailField(unique=True)                    # Unique email address
     password = models.CharField(max_length=128)               # Password (should be hashed)
@@ -80,7 +80,7 @@ class Student(models.Model):
     grade = models.IntegerField()                             # Grade or class
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
     parent = models.ForeignKey(User, on_delete=models.CASCADE)    # Parent or guardian (User)
-
+    is_active = models.BooleanField(default=True)  # Add this field to allow activation/deactivation
 
     def __str__(self):
      return self.full_name

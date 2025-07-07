@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import base64
-#import requests
+import requests  # Added import for requests
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import authenticate,logout, login as auth_login
@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required          #Ensures the 
 from django.shortcuts import render, redirect, get_object_or_404
 from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm)
 from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance)
+from .views_manual_mpesa import manual_mpesa_donation
+from .forms_manual_mpesa import ManualMpesaDonationForm
 
 
 
@@ -25,8 +27,8 @@ def signup(request):
             user.password = make_password(user.password)
             # Do not set role here; admin will assign role later
             user.save()
-            messages.success(request, 'Registration successful! Awaiting verification by admin.')
-            return redirect('homepage')  # Make sure 'homepage' URL name exists
+            messages.success(request, 'Registration successful! Awaiting verification by admin. Please log in after approval.')
+            return redirect('homepage')  # Redirect to home page after registration
         else:
             print("FORM ERRORS:", form.errors)
             messages.error(request, 'Please correct the errors below.')
@@ -59,7 +61,7 @@ def login_view(request):
                 auth_login(request, user)
 
                 # Redirect the user to the appropriate dashboard based on their role
-                role = user.role.name.lower()
+                role = user.role.name.strip().lower()
 
                 if role == 'donor':
                     return redirect('donor_dashboard')
@@ -67,7 +69,7 @@ def login_view(request):
                     return redirect('school_admin')
                 elif role == 'community agent':
                     return redirect('communityagent_dashboard')
-                elif role == 'parents':
+                elif role == 'parent':
                     return redirect('parent')
                 else:
                     # If role is not matched, go to homepage
@@ -89,6 +91,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully.')
     return redirect('homepage')  # This sends the user back to the login page
     
 #View of the submission of a feeding report
@@ -119,25 +122,29 @@ def register_school(request):
 # View to handle creation of a new Event
 def create_event(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            event = form.save(commit=False)
+            if request.user.role and request.user.role.name.lower() == 'school admin':
+                event.school = request.user.school  # Auto-assign school
+            event.save()
             messages.success(request, "Event Created  Successfully!")
             return redirect('communityagent_dashboard')
     else:
-        form = EventForm()
+        form = EventForm(user=request.user)
     return render(request, 'forms/event.html', {'form': form})
 
 # View to handle registration of a child by a parent
 def register_child(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST)
+        #allow the logged in parent to automatcally register their child
+        form = StudentForm(request.POST, parent=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Child Registered Successfully!")
             return redirect('parent')
     else:
-        form = StudentForm()
+        form = StudentForm(parent=request.user)
     return render(request, 'forms/student.html', {'form': form})
 
 # View to handle attendance
@@ -155,13 +162,16 @@ def attendance(request):
 #View of the submission of a feeding report
 def create_feeding_report(request):
     if request.method == 'POST':
-        form = FeedingReportForm(request.POST)
+        form = FeedingReportForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
+            report = form.save(commit=False)
+            if request.user.role and request.user.role.name.lower() == 'school admin':
+                report.school = request.user.school  # Auto-assign school
+            report.save()
             messages.success(request, "Feeding Report Created Successfully!")
             return redirect('school_admin')
     else:
-        form = FeedingReportForm()
+        form = FeedingReportForm(user=request.user)
     return render(request, 'forms/feeding_report.html', {'form': form})
 
 
@@ -196,16 +206,18 @@ def give_feedback(request):
 # Show the donor dashboard
 @login_required
 def donor_dashboard(request):
-    if request.user.role.name.lower() != 'donor':
-        messages.error(request, 'Unauthorized access.')
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'donor':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
     return render(request, 'donor_dashboard.html')  
 
 # Show the community_agent dashboard
 @login_required
 def communityagent_dashboard(request):
-    if request.user.role.name.lower() != 'community agent':
-        messages.error(request, 'Unauthorized access.')
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'community agent':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
     student_records = Student.objects.all()
     events = Event.objects.all()
@@ -218,19 +230,24 @@ def communityagent_dashboard(request):
 # Show the school admin dashboard
 @login_required
 def school_admin(request):
-    if request.user.role.name.lower() != 'school admin':
-        messages.error(request, 'Unauthorized access.')
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'school admin':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
     attendance_records = Attendance.objects.all()
+    # Only show students for this school
+    student_records = Student.objects.filter(school=request.user.school)
     return render(request, 'teacher.html', {
-        'attendance_records': attendance_records
+        'attendance_records': attendance_records,
+        'student_records': student_records
     })
 
 # Show the parent dashboard
 @login_required
 def parent(request):
-    if request.user.role.name.lower() != 'parents':
-        messages.error(request, 'Unauthorized access.')
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'parent':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
     return render(request, 'parent.html')
 
@@ -367,8 +384,20 @@ def delete_student_record(request, record_id):
 
 def get_access_token():
     url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-    response = requests.get(url, auth=(settings.MPESA_CONSUMER_KEY, settings.MPESA_CONSUMER_SECRET))
-    return response.json()['access_token']
+    response = requests.get(
+        url,
+        auth=(settings.MPESA_CONSUMER_KEY, settings.MPESA_CONSUMER_SECRET)
+    )
+
+    if not response.ok or not response.text.strip():
+        raise Exception(f"MPESA OAuth Error: {response.status_code} {response.text[:200]}")
+
+    try:
+        data = response.json()
+        return data['access_token']
+    except Exception as e:
+        raise Exception(f"Failed to decode access token response: {e}, Raw response: {response.text[:200]}")
+
 
 #Mpesa Integration
 @csrf_exempt
@@ -408,12 +437,48 @@ def stk_push(request):
         url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         response = requests.post(url, json=payload, headers=headers)
 
-        return render(request, "donation_success.html", {"response": response.json()})
+        # Defensive: check for empty or non-OK response
+        if not response.ok or not response.text.strip():
+            messages.error(request, f"No response or error from MPESA server. Status: {response.status_code}")
+            return render(request, "forms/donation_form.html", {"form": DonationForm(), "schools": School.objects.all()})
+
+        # Check if response is JSON
+        content_type = response.headers.get('Content-Type', '')
+        if 'application/json' not in content_type:
+            messages.error(request, f"MPESA server did not return JSON. Status: {response.status_code}. Response: {response.text[:200]}")
+            return render(request, "forms/donation_form.html", {"form": DonationForm(), "schools": School.objects.all()})
+
+        try:
+            resp_json = response.json()
+        except Exception:
+            messages.error(request, f"Failed to decode MPESA response: {response.text[:200]}")
+            return render(request, "forms/donation_form.html", {"form": DonationForm(), "schools": School.objects.all()})
+
+        # Check for success
+        if response.status_code == 200 and resp_json.get('ResponseCode') == '0':
+            messages.success(request, "MPESA payment initiated. Complete the payment on your phone.")
+            return render(request, "donation_success.html", {"response": resp_json})
+        else:
+            error_message = resp_json.get('errorMessage', f'Failed to initiate MPESA payment. Status: {response.status_code}. Response: {response.text[:200]}')
+            messages.error(request, error_message)
+            return render(request, "forms/donation_form.html", {"form": DonationForm(), "schools": School.objects.all()})
+
+    # If GET, redirect to donation form
+    return redirect('donation_form')
     
 @csrf_exempt
 def mpesa_callback(request):
     print("Callback received:", request.body)
     return JsonResponse({"status": "received"})
+
+@login_required
+def toggle_student_active(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    student.is_active = not student.is_active
+    student.save()
+    status = "activated" if student.is_active else "deactivated"
+    messages.success(request, f"Student {student.full_name} has been {status}.")
+    return redirect('communityagent_dashboard')
 
 
 

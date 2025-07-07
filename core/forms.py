@@ -1,5 +1,6 @@
 from django import forms
 from .models import Role, User, School, Student, Donation, FeedingReport, Feedback, Event, EventParticipation, Attendance
+from datetime import date
 
 # Form to create or update a Role instance
 class RoleForm(forms.ModelForm):
@@ -13,18 +14,34 @@ class RoleForm(forms.ModelForm):
 
 # Form to create or update a User instance : Handles validation and form rendering
 class UserForm(forms.ModelForm):
-            # Use PasswordInput widget to mask password input in forms
-        password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+        # Use PasswordInput widget to mask password input in forms
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    school = forms.ModelChoiceField(queryset=School.objects.all(), required=False, widget=forms.Select(attrs={'class': 'form-control'}))
 
-        class Meta:
-         model = User
-         fields = ['full_name', 'email', 'password']  # Exclude 'role' from the form
-         widgets = {
-            #'role': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for selecting role
-            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-            'password' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'password'})
-        }
+    class Meta:
+     model = User
+     fields = ['full_name', 'email', 'password', 'school']  # Add 'school' to the form
+     widgets = {
+        #'role': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for selecting role
+        'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full name'}),
+        'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        'password' : forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'password'})
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only show the school field if the user is being registered as a school admin
+        if not self.initial.get('is_school_admin', False):
+            self.fields['school'].widget = forms.HiddenInput()
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # If the user is a school admin, save the school
+        if self.cleaned_data.get('school'):
+            user.school = self.cleaned_data['school']
+        if commit:
+            user.save()
+        return user
 
 # Form to create or update School details
 class SchoolForm(forms.ModelForm):
@@ -47,8 +64,21 @@ class StudentForm(forms.ModelForm):
             'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Student full name'}),
             'grade': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),  # Grade must be positive integer
             'school': forms.Select(attrs={'class': 'form-control'}),               # Select school from existing entries
-            'parent': forms.Select(attrs={'class': 'form-control'}),               # Select parent user
+            'parent': forms.HiddenInput(),  # Hide parent field
         }
+
+    def __init__(self, *args, parent=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if parent is not None:
+            self.fields['parent'].initial = parent.id
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.fields['parent'].initial:
+            instance.parent_id = self.fields['parent'].initial
+        if commit:
+            instance.save()
+        return instance
 
 # Form to record a Donation made by a donor to a school
 class DonationForm(forms.ModelForm):
@@ -75,6 +105,11 @@ class FeedingReportForm(forms.ModelForm):
             'comments': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),          # Optional comments
         }
 
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user and user.role and user.role.name.lower() == 'school admin':
+            self.fields.pop('school')
+
 # Form to collect user Feedback messages
 class FeedbackForm(forms.ModelForm):
     class Meta:
@@ -93,18 +128,23 @@ class EventForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'event_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'event_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'min': date.today().isoformat()}),
             'school': forms.Select(attrs={'class': 'form-control'}),
             'created_by': forms.Select(attrs={'class': 'form-control'}),
         }
-        
-    def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
-        # Show only users whose role is 'Community Agent'
+    
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['created_by'].queryset = User.objects.filter(role__name='Community Agent')
-        print(self.fields['created_by'].queryset)
+        self.fields['event_date'].widget.attrs['min'] = date.today().isoformat()
+        if user and user.role and user.role.name.lower() == 'school admin':
+            self.fields.pop('school')
 
-
+    def clean_event_date(self):
+        event_date = self.cleaned_data['event_date']
+        if event_date < date.today():
+            raise forms.ValidationError('Event date cannot be in the past.')
+        return event_date
 
 # Form to manage participation of donors in events
 class EventParticipationForm(forms.ModelForm):

@@ -104,6 +104,39 @@
     </table>
   </div>
 </div>
+<!-- ========== STUDENT TABLE RECORDS SECTION ========== -->
+<div class="container mt-5">
+  <h3 class="mb-4">Student Records</h3>
+  <div class="table-responsive shadow rounded">
+    <table class="table table-striped table-hover align-middle" id="studentTable">
+  <thead>
+    <tr>
+      <th>Student Name</th>
+      <th>Grade</th>
+      <th>School</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in student_records %}
+      <tr>
+        <td>{{ record.full_name }}</td>
+        <td>{{ record.grade }}</td>
+        <td>{{ record.school.school_name|default:"N/A" }}</td>
+        <td>
+          {% if record.id %}
+            <a href="{% url 'edit_student_record' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+            <a href="{% url 'delete_student_record' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          {% else %}
+            <span class="text-danger">No Id</span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+    </table>
+  </div>
+</div>
 
   <!-- Footer -->
   <footer class="bg-light mt-5 p-3 text-center text-muted">

@@ -136,9 +136,5 @@ LOGIN_URL = '/login/'
 AUTH_USER_MODEL = 'core.User'
 
 
-MPESA_ENVIRONMENT = 'sandbox'
-MPESA_SHORTCODE = '174379'  # Test shortcode
-MPESA_CONSUMER_KEY = 'YOUR_CONSUMER_KEY'
-MPESA_CONSUMER_SECRET = 'YOUR_CONSUMER_SECRET'
-MPESA_PASSKEY = 'YOUR_PASSKEY'
-MPESA_CALLBACK_URL = 'https://example.com/mpesa/callback/'  # Replace with actual URL
+# MPESA manual payment: No API credentials needed
+MPESA_SHORTCODE = '174379'  # Test shortcode for manual instructions

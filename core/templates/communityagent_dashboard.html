@@ -82,12 +82,16 @@
   <tbody>
     {% for record in student_records %}
       <tr>
-        <td>{{ record.student.full_name }}</td>
+        <td>{{ record.full_name }}</td>
         <td>{{ record.grade }}</td>
-        <td>{{ record.school }}</td>
+        <td>{{ record.school.school_name|default:"N/A" }}</td>
         <td>
           {% if record.id %}
-            <a href="{% url 'edit_student_record' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+            {% if record.is_active %}
+              <a href="{% url 'toggle_student_active' record.id %}" class="btn btn-sm btn-outline-warning me-2">Deactivate</a>
+            {% else %}
+              <a href="{% url 'toggle_student_active' record.id %}" class="btn btn-sm btn-outline-success me-2">Activate</a>
+            {% endif %}
             <a href="{% url 'delete_student_record' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
           {% else %}
             <span class="text-danger">No Id</span>

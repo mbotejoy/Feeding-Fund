@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views  # Import views from the same app(core)
+from .views_manual_mpesa import manual_mpesa_donation
 
 urlpatterns = [
 
@@ -8,6 +9,9 @@ urlpatterns = [
 
     # Donation form view
     path('mpesa/donate/', views.donation_form, name='donation_form'),
+
+    # Manual MPESA donation form
+    path('donate/manual/', manual_mpesa_donation, name='manual_mpesa_donation'),
 
     # Event creation form page - shows form and handles submission
     path('event/create/', views.create_event, name='create_event'),
@@ -79,12 +83,7 @@ urlpatterns = [
     #Mpesa callback url
     path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
 
-
-
-
-
-
-
+    path('student/<int:student_id>/toggle-active/', views.toggle_student_active, name='toggle_student_active'),
 
 ]
 

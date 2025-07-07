@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Donate via MPESA (Manual Submission)</h2>
+<div class="alert alert-info">
+    <strong>How to Donate via MPESA:</strong><br>
+    1. Go to M-PESA on your phone.<br>
+    2. Select Lipa na M-PESA.<br>
+    3. Choose Paybill.<br>
+    4. Enter Business Number: <b>{{ shortcode }}</b><br>
+    5. Enter Account Number: <b>Donation</b><br>
+    6. Enter the Amount.<br>
+    7. Enter your M-PESA PIN and confirm.<br>
+    8. After payment, fill the form below with your details and transaction code.
+</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Submit Donation Details</button>
+</form>
+{% endblock %}
