@@ -1,5 +1,5 @@
 from django import forms
-from .models import Role, User, School, Student, Donation, FeedingReport, Feedback, Event, EventParticipation, Attendance
+from .models import Role, User, School, Student, Donation, FeedingReport, Feedback, Event, EventParticipation, Attendance, ManualMpesaDonation
 from datetime import date
 
 # Form to create or update a Role instance
@@ -150,15 +150,23 @@ class EventForm(forms.ModelForm):
 class EventParticipationForm(forms.ModelForm):
     class Meta:
         model = EventParticipation
-        fields = ['event', 'donor']
+        fields = ['event']  # Only show event selection to the donor
         widgets = {
-            'event': forms.Select(attrs={'class': 'form-control'}),               # Event selection
-            'donor': forms.Select(attrs={'class': 'form-control'}),               # Donor user selection
+            'event': forms.Select(attrs={'class': 'form-control'}),
         }
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        #  donor filtering 
-        self.fields['donor'].queryset = User.objects.filter(role__name='Donor')
+        # Optionally, filter events if needed
+        self.user = user
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.user:
+            instance.donor = self.user
+        if commit:
+            instance.save()
+        return instance
 
 # Form to record student Attendance for a given date
 class AttendanceForm(forms.ModelForm):
@@ -169,6 +177,18 @@ class AttendanceForm(forms.ModelForm):
             'student': forms.Select(attrs={'class': 'form-control'}),             # Student selection
             'attendance': forms.CheckboxInput(attrs={'class': 'form-check-input'}),  # Present or absent checkbox
             'attendance_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),  # Date picker
+        }
+
+# Form to handle manual Mpesa donations
+class ManualMpesaDonationForm(forms.ModelForm):
+    class Meta:
+        model = ManualMpesaDonation
+        fields = ['name', 'phone', 'amount', 'transaction_code']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'transaction_code': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 

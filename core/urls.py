@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views  # Import views from the same app(core)
-from .views_manual_mpesa import manual_mpesa_donation
+from .views import manual_mpesa_donation, donor_donation_history
 
 urlpatterns = [
 
@@ -84,6 +84,9 @@ urlpatterns = [
     path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
 
     path('student/<int:student_id>/toggle-active/', views.toggle_student_active, name='toggle_student_active'),
+
+    # Donor's donation history page
+    path('donor/donations/', views.donor_donation_history, name='donor_donation_history'),
 
 ]
 

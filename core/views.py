@@ -11,11 +11,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
-from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm)
-from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance)
-from .views_manual_mpesa import manual_mpesa_donation
-from .forms_manual_mpesa import ManualMpesaDonationForm
-
+from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm,ManualMpesaDonationForm)
+from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance, ManualMpesaDonation)
 
 
 #View of the User Registration page
@@ -178,15 +175,14 @@ def create_feeding_report(request):
 # Handle event participation form
 def join_an_event(request):
     if request.method == 'POST':
-        form = EventParticipationForm(request.POST)
+        form = EventParticipationForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()  # Save event participation
+            form.save()
             messages.success(request, "You have successfully joined the event!")
-            return redirect('donor_dashboard')  # Redirect to dashboard after submission
+            return redirect('donor_dashboard')
     else:
-        form = EventParticipationForm()  # Display blank form for GET request
-
-    return render(request, 'forms/event_participation.html', {'form': form})  # Render the form template
+        form = EventParticipationForm(user=request.user)
+    return render(request, 'forms/event_participation.html', {'form': form, 'donor': request.user})  # Render the form template
 
 # Handles Feedback form
 def give_feedback(request):
@@ -273,13 +269,16 @@ def donation_form(request):
     schools = School.objects.all()
 
     if request.method == 'POST':
-        form = DonationForm(request.POST)
+        form = ManualMpesaDonationForm(request.POST)
         if form.is_valid():
-            # process the donation form
-            form.save()
-            # or redirect to success page
+            donation = form.save(commit=False)
+            if request.user.is_authenticated:
+                donation.user = request.user
+            donation.save()
+            messages.success(request, 'Thank you! Your donation details have been submitted. We will verify and contact you if needed.')
+            return redirect('donor_donation_history')
     else:
-        form = DonationForm()  # ← This is missing in your code!
+        form = ManualMpesaDonationForm()
 
     return render(request, 'forms/donation_form.html', {
         'form': form,
@@ -479,6 +478,26 @@ def toggle_student_active(request, student_id):
     status = "activated" if student.is_active else "deactivated"
     messages.success(request, f"Student {student.full_name} has been {status}.")
     return redirect('communityagent_dashboard')
+
+
+@login_required
+def manual_mpesa_donation(request):
+    if request.method == 'POST':
+        form = ManualMpesaDonationForm(request.POST)
+        if form.is_valid():
+            donation = form.save(commit=False)
+            donation.user = request.user
+            donation.save()
+            messages.success(request, 'Thank you! Your donation details have been submitted. We will verify and contact you if needed.')
+            return redirect('donor_donation_history')
+    else:
+        form = ManualMpesaDonationForm()
+    return render(request, 'forms/manual_mpesa_donation.html', {'form': form})
+
+@login_required
+def donor_donation_history(request):
+    donations = ManualMpesaDonation.objects.filter(user=request.user).order_by('-submitted_at')
+    return render(request, 'forms/donor_donation_history.html', {'donations': donations})
 
 
 
