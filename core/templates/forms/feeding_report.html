@@ -84,7 +84,16 @@
 <form method="POST">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit" class="btn btn-info">Submit Report</button>
+  <button type="submit" class="btn btn-info w-100">Submit Report</button>
+  {% if request.user.groups.all.0.name == "School Admin" %}
+    <a href="{% url 'school_admin' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+  {% elif request.user.groups.all.0.name == "Community Agent" %}
+    <a href="{% url 'communityagent_dashboard' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+  {% else %}
+    <a href="{% url 'homepage' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
+  {% endif %}
+
+</form>
 </form>
     </div>
   </div>

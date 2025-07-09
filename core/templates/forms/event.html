@@ -82,8 +82,28 @@
   <!-- Start of form -->
 <form method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
-    <button type="submit" class="btn btn-warning">Create Event</button>
+  <div class="mb-3">
+    <label for="id_title">Event Title</label>
+    {{ form.title }}
+  </div>
+  <div class="mb-3">
+    <label for="id_description">Description</label>
+    {{ form.description }}
+  </div>
+  <div class="mb-3">
+    <label for="id_event_date">Event Date</label>
+    {{ form.event_date }}
+  </div>
+  <div class="mb-3">
+    <label for="id_school">School</label>
+    {{ form.school }}
+  </div>
+  <div class="mb-3">
+    <label>Created By</label>
+    <input type="text" class="form-control" value="{{ user.full_name }}" readonly>
+  </div>
+  <button type="submit" class="btn btn-warning w-100 mt-2">Create Event</button>
+    <a href="{% url 'communityagent_dashboard' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
 </form>
 <!-- End of form -->
     </div>

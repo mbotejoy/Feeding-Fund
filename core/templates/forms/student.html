@@ -82,7 +82,8 @@
 <form method="POST">
   {% csrf_token %}
   {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Register Student</button>
+    <button type="submit" class="btn btn-primary w-100">Register Student</button>
+    <a href="{% url 'parent' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
   </form>
   <!-- End of form -->
 </div>

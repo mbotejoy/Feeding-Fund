@@ -84,9 +84,10 @@
 <form method="POST">
   {% csrf_token %}
   {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Register School</button>
+    <button type="submit" class="btn btn-success w-100">Register School</button>
   </form>
   <!-- End of form -->
+  <a href="{% url 'communityagent_dashboard' %}" class="btn btn-secondary w-100 mt-2">Cancel</a>
 </div>
   </div>
 

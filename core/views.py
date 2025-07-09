@@ -124,12 +124,13 @@ def create_event(request):
             event = form.save(commit=False)
             if request.user.role and request.user.role.name.lower() == 'school admin':
                 event.school = request.user.school  # Auto-assign school
+            event.created_by = request.user  # Always set the creator to the logged-in user
             event.save()
             messages.success(request, "Event Created  Successfully!")
             return redirect('communityagent_dashboard')
     else:
         form = EventForm(user=request.user)
-    return render(request, 'forms/event.html', {'form': form})
+    return render(request, 'forms/event.html', {'form': form, 'user': request.user})
 
 # View to handle registration of a child by a parent
 def register_child(request):

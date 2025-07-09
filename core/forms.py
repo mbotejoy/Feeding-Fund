@@ -124,27 +124,28 @@ class FeedbackForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'description', 'event_date', 'school', 'created_by']
+        fields = ['title', 'description', 'event_date', 'school']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'event_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'min': date.today().isoformat()}),
             'school': forms.Select(attrs={'class': 'form-control'}),
-            'created_by': forms.Select(attrs={'class': 'form-control'}),
         }
     
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['created_by'].queryset = User.objects.filter(role__name='Community Agent')
         self.fields['event_date'].widget.attrs['min'] = date.today().isoformat()
         if user and user.role and user.role.name.lower() == 'school admin':
             self.fields.pop('school')
+        self.user = user
 
-    def clean_event_date(self):
-        event_date = self.cleaned_data['event_date']
-        if event_date < date.today():
-            raise forms.ValidationError('Event date cannot be in the past.')
-        return event_date
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if hasattr(self, 'user') and self.user:
+            instance.created_by = self.user
+        if commit:
+            instance.save()
+        return instance
 
 # Form to manage participation of donors in events
 class EventParticipationForm(forms.ModelForm):

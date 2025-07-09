@@ -103,7 +103,8 @@
           <label class="form-label">MPESA Transaction Code</label>
           <input type="text" class="form-control" name="transaction_code" placeholder="e.g. QJD45KLMN1" required>
         </div>
-        <button type="submit" class="btn btn-success">Submit Donation Details</button>
+        <button type="submit" class="btn btn-success w-100" style="height: 38px; display: block; padding-top: 6px; padding-bottom: 6px;">Submit Donation Details</button>
+        <a href="{% url 'donor_dashboard' %}" class="btn btn-secondary w-100 mt-2" style="height: 38px; display: block; padding-top: 6px; padding-bottom: 6px;">Cancel</a>
       </div>
     </div>
   </form>
