@@ -59,8 +59,8 @@
 
         <div class="dashboard-buttons d-flex flex-column">
             <a href="{% url 'register_child'%}" class="btn mb-3 rounded-pill" style="background-color:#007bff; color:white;">Register Child</a>
-            <a href="update-wallet.html" class="btn mb-3 rounded-pill" style="background-color:#28a745; color:white;">Update Child's Wallet</a>
-            <a href="view-wallet.html" class="btn rounded-pill" style="background-color:#e5e8e8; color:white;">View Child's Wallet</a>
+            <a href="{% url 'update_child_wallet' %}" class="btn mb-3 rounded-pill" style="background-color:#28a745; color:white;">Update Child's Wallet</a>
+            <a href="{% url 'view_child_wallet' %}" class="btn rounded-pill" style="background-color:#ff9800; color:white;">View Child's Wallet</a>
        </div>
 
 

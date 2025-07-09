@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
 from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm,ManualMpesaDonationForm)
-from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance, ManualMpesaDonation)
+from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance, ManualMpesaDonation, WalletTopUp, ChildWallet)
 
 
 #View of the User Registration page
@@ -217,9 +217,11 @@ def communityagent_dashboard(request):
         return redirect('homepage')
     student_records = Student.objects.all()
     events = Event.objects.all()
+    attendance_records = Attendance.objects.select_related('student__school').all()
     context = {
         'student_records': student_records,
-        'events': events
+        'events': events,
+        'attendance_records': attendance_records,
     }
     return render(request, 'communityagent_dashboard.html', context)
 
@@ -230,8 +232,7 @@ def school_admin(request):
     if role_name != 'school admin':
         messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
-    attendance_records = Attendance.objects.all()
-    # Only show students for this school
+    attendance_records = Attendance.objects.select_related('student__school').all()
     student_records = Student.objects.filter(school=request.user.school)
     return render(request, 'teacher.html', {
         'attendance_records': attendance_records,
@@ -498,6 +499,70 @@ def manual_mpesa_donation(request):
 def donor_donation_history(request):
     donations = ManualMpesaDonation.objects.filter(user=request.user).order_by('-submitted_at')
     return render(request, 'forms/donor_donation_history.html', {'donations': donations})
+
+@login_required
+def update_child_wallet(request):
+    # Only allow parents
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'parent':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
+        return redirect('homepage')
+    # Get children for this parent
+    children = Student.objects.filter(parent=request.user)
+    if request.method == 'POST':
+        form = ManualMpesaDonationForm(request.POST)
+        student_id = request.POST.get('student')
+        if form.is_valid() and student_id:
+            donation = form.save(commit=False)
+            donation.user = request.user
+            donation.name = request.user.full_name
+            donation.save()
+            messages.success(request, 'Funds submitted! We will verify and update your child\'s wallet soon.')
+            return redirect('view_child_wallet')
+    else:
+        form = ManualMpesaDonationForm()
+    return render(request, 'forms/update_wallet.html', {'form': form, 'children': children, 'user': request.user})
+
+@login_required
+def view_child_wallet(request):
+    # Only allow parents
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'parent':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
+        return redirect('homepage')
+    # Get all topups for this parent (across all their children)
+    topups = WalletTopUp.objects.filter(parent=request.user).select_related('wallet__student__school').order_by('-submitted_at')
+    # Get all wallets for this parent's children
+    wallets = ChildWallet.objects.filter(student__parent=request.user).select_related('student__school')
+    return render(request, 'forms/view_wallet.html', {'topups': topups, 'wallets': wallets})
+
+def homepage_mpesa_donation(request):
+    if request.method == 'POST':
+        donor_name = request.POST.get('donor_name') or request.POST.get('donor')
+        amount = request.POST.get('amount')
+        transaction_code = request.POST.get('transaction_code')
+        phone = request.POST.get('phone', '')
+        if not (donor_name and amount and transaction_code):
+            messages.error(request, 'All fields are required.')
+            return redirect('homepage')
+        try:
+            amount = float(amount)
+        except ValueError:
+            messages.error(request, 'Invalid amount.')
+            return redirect('homepage')
+        # Save the donation using ManualMpesaDonation
+        ManualMpesaDonation.objects.create(
+            name=donor_name,
+            amount=amount,
+            transaction_code=transaction_code,
+            phone=phone,
+            verified=False,
+        )
+        return redirect('homepage_donation_thankyou')
+    return redirect('homepage')
+
+def homepage_donation_thankyou(request):
+    return render(request, 'forms/donation_thank_you.html')
 
 
 

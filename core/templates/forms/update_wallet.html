@@ -1,0 +1,141 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Update Child's Wallet</title>
+  <!-- Load Bootstrap from CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0f7fa 0%, #fffde7 100%);
+      font-family: 'Poppins', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .form-outer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 65vh;
+    }
+    .form-inner-card {
+      background: #d8d6d6;
+      border-radius: 16px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      box-shadow: 0 8px 24px rgba(33, 150, 243, 0.10), 8px 8px 24px rgba(33, 150, 243, 0.12);
+      /* Right and bottom shadow emphasis */
+      max-width: 430px;
+      width: 100%;
+    }
+    @media (max-width: 600px) {
+      .form-inner-card {
+        padding: 1.2rem 0.5rem;
+        max-width: 98vw;
+      }
+    }
+  </style>
+
+</head>
+<body>
+
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'Images/Our_Logo.png' %}" alt="Logo" width="120">
+    </a>
+    <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished with Joy and Grace</span>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{%url 'homepage'%}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'about_us'%}">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'signup'%}">Sign Up</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'impact'%}">Impact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  </nav>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card shadow p-4">
+        <a href="{% url 'parent' %}" class="btn btn-success mb-4 rounded-pill" style="background-color:#28a745; color:white; width:220px;">&larr; Back to Dashboard</a>
+        <h2 class="mb-4 text-center">Add Funds to Child's Wallet (Manual MPESA)</h2>
+        <div class="alert alert-info">
+          <strong>How to Update Wallet via MPESA:</strong><br>
+          1. Go to M-PESA on your phone.<br>
+          2. Select Lipa na M-PESA.<br>
+          3. Choose Paybill.<br>
+          4. Enter Business Number: <b>174379</b><br>
+          5. Enter Account Number: <b>Input Child's Name</b><br>
+          6. Enter the Amount.<br>
+          7. Enter your M-PESA PIN and confirm.<br>
+          8. After payment, fill the form below with your details and transaction code.
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              <ul>
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+              {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+          <div class="mb-3">
+            <label class="form-label">Child</label>
+            <select name="student" class="form-control" required>
+              <option value="">Select Child</option>
+              {% for child in children %}
+                <option value="{{ child.id }}">{{ child.full_name }} (Grade {{ child.grade }}, {{ child.school.school_name }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Parent Name</label>
+            <input type="text" class="form-control" name="name" value="{{ user.full_name }}" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Phone Number (07...)</label>
+            <input type="text" class="form-control" name="phone" placeholder="07XXXXXXXX" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Amount (KES)</label>
+            <input type="number" class="form-control" name="amount" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">MPESA Transaction Code</label>
+            <input type="text" class="form-control" name="transaction_code" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+  <footer class="bg-light mt-5 p-3 text-center text-muted">
+    &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
+  </footer>
+
+  <!-- Bootstrap JS Bundle (required for navbar toggler) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

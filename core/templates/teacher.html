@@ -71,71 +71,60 @@
       </div>
     </div>
   </div>
-  <!-- ========== ATTENDANCE TABLE SECTION ========== -->
+
+<!-- ========== ATTENDANCE TABLE SECTION ========== -->
 <div class="container mt-5">
   <h3 class="mb-4">Attendance Records</h3>
   <div class="table-responsive shadow rounded">
+    <div class="mb-3">
+      <input type="text" id="attendanceSearch" class="form-control" placeholder="Search attendance records...">
+    </div>
     <table class="table table-striped table-hover align-middle" id="attendanceTable">
-  <thead>
-    <tr>
-      <th>Student</th>
-      <th>Date</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for record in attendance_records %}
-      <tr>
-        <td>{{ record.student.full_name }}</td>
-        <td>{{ record.attendance_date }}</td>
-        <td>{{ record.attendance }}</td>
-        <td>
-          {% if record.id %}
-            <a href="{% url 'edit_attendance' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-            <a href="{% url 'delete_attendance' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-          {% else %}
-            <span class="text-danger">No Id</span>
-          {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Grade</th>
+          <th>School</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in attendance_records %}
+          <tr>
+            <td>{{ record.student.full_name }}</td>
+            <td>{{ record.student.grade }}</td>
+            <td>{{ record.student.school.school_name|default:"N/A" }}</td>
+            <td>{{ record.attendance_date }}</td>
+            <td>{{ record.attendance }}</td>
+            <td>
+              {% if record.id %}
+                <a href="{% url 'edit_attendance' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                <a href="{% url 'delete_attendance' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+              {% else %}
+                <span class="text-danger">No Id</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
   </div>
-</div>
-<!-- ========== STUDENT TABLE RECORDS SECTION ========== -->
-<div class="container mt-5">
-  <h3 class="mb-4">Student Records</h3>
-  <div class="table-responsive shadow rounded">
-    <table class="table table-striped table-hover align-middle" id="studentTable">
-  <thead>
-    <tr>
-      <th>Student Name</th>
-      <th>Grade</th>
-      <th>School</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for record in student_records %}
-      <tr>
-        <td>{{ record.full_name }}</td>
-        <td>{{ record.grade }}</td>
-        <td>{{ record.school.school_name|default:"N/A" }}</td>
-        <td>
-          {% if record.id %}
-            <a href="{% url 'edit_student_record' record.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-            <a href="{% url 'delete_student_record' record.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-          {% else %}
-            <span class="text-danger">No Id</span>
-          {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-    </table>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('attendanceSearch');
+      const table = document.getElementById('attendanceTable');
+      searchInput.addEventListener('keyup', function() {
+        const filter = searchInput.value.toLowerCase();
+        const rows = table.getElementsByTagName('tr');
+        for (let i = 1; i < rows.length; i++) { // skip header
+          const rowText = rows[i].textContent.toLowerCase();
+          rows[i].style.display = rowText.includes(filter) ? '' : 'none';
+        }
+      });
+    });
+  </script>
 </div>
 
   <!-- Footer -->

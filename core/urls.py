@@ -88,5 +88,15 @@ urlpatterns = [
     # Donor's donation history page
     path('donor/donations/', views.donor_donation_history, name='donor_donation_history'),
 
+    path('parent/update-wallet/', views.update_child_wallet, name='update_child_wallet'),
+
+    path('parent/view-wallet/', views.view_child_wallet, name='view_child_wallet'),
+
+    # Homepage MPESA donation form submission
+    path('homepage-mpesa-donation/', views.homepage_mpesa_donation, name='homepage_mpesa_donation'),
+
+    # Donation thank you page
+    path('donation-thank-you/', views.homepage_donation_thankyou, name='homepage_donation_thankyou'),
+
 ]
 

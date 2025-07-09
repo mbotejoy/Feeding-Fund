@@ -80,7 +80,56 @@
           <div class="card-body">
             <h5 class="card-title">Help Feed a Child Today</h5>
             <p class="card-text">Your donation can give a child a healthy start and support their education.</p>
-            <a href class="btn btn-success btn-block">Donate Now</a>
+            <!-- Donate Now button triggers modal -->
+            <a href="#" class="btn btn-success btn-block" data-toggle="modal" data-target="#mpesaDonationModal">Donate Now</a>
+            <!-- MPESA Donation Modal -->
+            <div class="modal fade" id="mpesaDonationModal" tabindex="-1" role="dialog" aria-labelledby="mpesaDonationModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <form method="post" action="{% url 'homepage_mpesa_donation' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="mpesaDonationModalLabel">MPESA Donation</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="alert alert-info" style="font-size:0.98rem;">
+                        <strong>How to Donate via MPESA:</strong><br>
+                        1. Open your MPESA menu on your phone.<br>
+                        2. Select <strong>Lipa na MPESA</strong> &rarr; <strong>Paybill</strong>.<br>
+                        3. Enter our Paybill Number: <strong>170512</strong>.<br>
+                        4. For Account, enter  "Donation".<br>
+                        5. Enter the amount you wish to donate.<br>
+                        6. Complete the payment and copy the MPESA transaction code.<br>
+                        7. Fill in the form below with your details and the transaction code.<br>
+                      </div>
+                      <div class="form-group">
+                        <label for="donor_name">Donor Name</label>
+                        <input type="text" class="form-control" id="donor_name" name="donor_name" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="amount">Amount (KES)</label>
+                        <input type="number" class="form-control" id="amount" name="amount" min="1" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" maxlength="20" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="transaction_code">MPESA Transaction Code</label>
+                        <input type="text" class="form-control" id="transaction_code" name="transaction_code" required>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <button type="submit" class="btn btn-success">Donate</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -95,6 +144,7 @@
         </p>
         <div class="d-flex justify-content-center mt-3">
           <a href="#impact" class="btn rounded-pill" style="background-color:#007bff; color:#fff; font-weight:600; padding:12px 36px; font-size:1.1rem;">See Our Impact</a>
+              <a href="#events" class="btn rounded-pill ml-2" style="background-color:#007bff; color:#fff; font-weight:600; padding:12px 36px; font-size:1.1rem;">See Upcoming Events</a>
         </div>
       </div>
     </div>
@@ -212,7 +262,7 @@
 </section>
 
 <!-- =============== EVENTS TABLE SECTION =============== -->
-<div class="container mt-5 d-flex justify-content-center">
+<div id="events" class="container mt-5 d-flex justify-content-center">
   <div class="w-100" style="max-width:900px;">
     <h3 class="mb-4">Upcoming School Events</h3>
     <div class="table-responsive shadow rounded">
