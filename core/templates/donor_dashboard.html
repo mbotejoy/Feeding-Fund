@@ -72,11 +72,43 @@
     <div class="dashboard-img-section">
         <img src="{% static 'Images/thanks-for-your-donations.jpg' %}" alt="Donor Impact" width="500" />
       </div>
+    </div>
 
+    <!-- Feeding Report Table Section -->
+    <div class="container mt-5">
+      <h3 class="mb-4">Recent Feeding Reports</h3>
+      <div class="table-responsive shadow rounded">
+        <table class="table table-striped table-hover align-middle" id="feedingReportTable">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Report Date</th>
+              <th scope="col">Meals Received</th>
+              <th scope="col">Meals Served</th>
+              <th scope="col">Comments</th>
+              <th scope="col">School</th>
+              <th scope="col">Reported By</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in feeding_reports %}
+              <tr>
+                <td>{{ report.date|date:'M d, Y' }}</td>
+                <td>{{ report.meals_received|default:'-' }}</td>
+                <td>{{ report.meals_served|default:'-' }}</td>
+                <td>{{ report.comments|default:'-' }}</td>
+                <td>{{ report.school.school_name|default:'N/A' }}</td>
+                <td>{{ report.reported_by.full_name|default:report.reported_by.email }}</td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">No feeding reports available.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
     
-    
-  </div>
-
 <!-- Footer -->
 <footer class="bg-light mt-5 p-3 text-center text-muted">
   &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
@@ -86,5 +118,25 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="styles.css/donor.js"></script>
+
+  <!-- DataTables for Feeding Report Table -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#feedingReportTable').DataTable({
+        paging: true,
+        searching: true,
+        info: true,
+        lengthChange: false,
+        pageLength: 5,
+        order: [[0, 'desc']],
+        language: {
+          search: "Filter reports:"
+        }
+      });
+    });
+  </script>
 </body>
 </html>
