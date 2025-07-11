@@ -115,6 +115,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)                      # Event title
     description = models.TextField()                              # Event description
     event_date = models.DateField()                               # Date of the event
+    event_time = models.TimeField(null=True, blank=True)          # Time of the event
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school;This tells Django: each event is linked to a single school.
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)# User who created the event
     created_at = models.DateTimeField(auto_now_add=True)          # Timestamp of event creation

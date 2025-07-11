@@ -124,11 +124,12 @@ class FeedbackForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'description', 'event_date', 'school']
+        fields = ['title', 'description', 'event_date', 'event_time', 'school']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Event title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'event_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'min': date.today().isoformat()}),
+            'event_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'school': forms.Select(attrs={'class': 'form-control'}),
         }
     
