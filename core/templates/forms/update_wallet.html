@@ -98,12 +98,10 @@
           {% endif %}
           <div class="mb-3">
             <label class="form-label">Child</label>
-            <select name="student" class="form-control" required>
-              <option value="">Select Child</option>
-              {% for child in children %}
-                <option value="{{ child.id }}">{{ child.full_name }} (Grade {{ child.grade }}, {{ child.school.school_name }})</option>
-              {% endfor %}
-            </select>
+            <div class="form-control bg-light" readonly>
+              {{ children.0.full_name }} (Grade {{ children.0.grade }}, {{ children.0.school.school_name }})
+            </div>
+            <input type="hidden" name="student" value="{{ children.0.id }}">
           </div>
           <div class="mb-3">
             <label class="form-label">Parent Name</label>
