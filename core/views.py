@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.decorators import login_required          #Ensures the user is authenticated
 from django.shortcuts import render, redirect, get_object_or_404
 from core.forms import (DonationForm, FeedingReportForm, EventForm, EventParticipationForm,UserForm, SchoolForm, FeedingReportForm,StudentForm,AttendanceForm,FeedbackForm,ManualMpesaDonationForm)
-from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance, ManualMpesaDonation, WalletTopUp, ChildWallet)
+from core.models import (Donation, FeedingReport, Event, User, School,Role,Student,Attendance, ManualMpesaDonation, WalletTopUp, ChildWallet, EventParticipation)
 
 
 #View of the User Registration page
@@ -564,6 +564,22 @@ def homepage_mpesa_donation(request):
 
 def homepage_donation_thankyou(request):
     return render(request, 'forms/donation_thank_you.html')
+
+
+
+# View to list donors registered for a specific event
+@login_required
+def registered_donors(request, event_id=None):
+    if event_id:
+        event = get_object_or_404(Event, id=event_id)
+        event_participations = EventParticipation.objects.filter(event=event).select_related('donor').order_by('-id')
+    else:
+        event = None
+        event_participations = EventParticipation.objects.select_related('donor', 'event').order_by('-id')
+    return render(request, 'forms/registered_donors.html', {
+        'event': event,
+        'event_participations': event_participations
+    })
 
 
 

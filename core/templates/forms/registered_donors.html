@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registered Donors for Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4">
+    {% if event %}
+      Registered Donors for Event: {{ event.title }}
+    {% else %}
+      All Registered Donors for All Events
+    {% endif %}
+  </h2>
+  {% if event %}
+    {% with col_count=1 %}
+    <div class="table-responsive shadow rounded">
+      <table class="table table-striped table-hover align-middle" id="donorsTable">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Donor Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for participation in event_participations %}
+            <tr>
+              <td>{{ participation.donor.full_name|default:participation.donor.email }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="{{ col_count }}" class="text-center">No donors have registered for this event yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endwith %}
+  {% else %}
+    {% with col_count=2 %}
+    <div class="table-responsive shadow rounded">
+      <table class="table table-striped table-hover align-middle" id="donorsTable">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Donor Name</th>
+            <th scope="col">Event</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for participation in event_participations %}
+            <tr>
+              <td>{{ participation.donor.full_name|default:participation.donor.email }}</td>
+              <td>{{ participation.event.title }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="{{ col_count }}" class="text-center">No donors have registered yet.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endwith %}
+  {% endif %}
+  <a href="{% url 'communityagent_dashboard' %}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+{% if event %}
+<script>
+  $(document).ready(function() {
+    $('#donorsTable').DataTable({
+      paging: true,
+      searching: true,
+      info: true,
+      lengthChange: false,
+      pageLength: 10,
+      order: [[0, 'asc']],
+      language: {
+        search: "Filter donors:"
+      }
+    });
+  });
+</script>
+{% else %}
+<script>
+  $(document).ready(function() {
+    $('#donorsTable').DataTable({
+      paging: true,
+      searching: true,
+      info: true,
+      lengthChange: false,
+      pageLength: 10,
+      order: [[1, 'asc']],
+      language: {
+        search: "Filter donors:"
+      }
+    });
+  });
+</script>
+{% endif %}
+</body>
+</html>

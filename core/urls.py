@@ -98,5 +98,10 @@ urlpatterns = [
     # Donation thank you page
     path('donation-thank-you/', views.homepage_donation_thankyou, name='homepage_donation_thankyou'),
 
+    path('registered_donors/', views.registered_donors, name='registered_donors'),
+
+    path('events/<int:event_id>/registered-donors/', views.registered_donors, name='registered_donors'),
+
+
 ]
 
