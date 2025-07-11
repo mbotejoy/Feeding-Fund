@@ -82,6 +82,7 @@ class Student(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)  # Associated school
     parent = models.ForeignKey(User, on_delete=models.CASCADE)    # Parent or guardian (User)
     is_active = models.BooleanField(default=True)  # Add this field to allow activation/deactivation
+    verified = models.BooleanField(default=False)  # School admin must verify student
 
     def __str__(self):
      return self.full_name

@@ -116,7 +116,7 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['user', 'message']
         widgets = {
-            'user': forms.Select(attrs={'class': 'form-control'}),                # Feedback author
+            'user': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your name'}),  # User name as text input
             'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Your feedback'}),  # Feedback text
         }
 

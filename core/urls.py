@@ -102,6 +102,9 @@ urlpatterns = [
 
     path('events/<int:event_id>/registered-donors/', views.registered_donors, name='registered_donors'),
 
+    path('students/manage/', views.student_management, name='student_management'),
+    path('students/verify/<int:student_id>/', views.verify_student, name='verify_student'),
+
 
 ]
 

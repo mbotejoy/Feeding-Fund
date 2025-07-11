@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from datetime import datetime
 import base64
 import requests  # Added import for requests
@@ -234,10 +235,10 @@ def school_admin(request):
         messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
     attendance_records = Attendance.objects.select_related('student__school').all()
-    student_records = Student.objects.filter(school=request.user.school)
+    students = Student.objects.filter(school=request.user.school)
     return render(request, 'teacher.html', {
         'attendance_records': attendance_records,
-        'student_records': student_records
+        'students': students
     })
 
 # Show the parent dashboard
@@ -580,6 +581,25 @@ def registered_donors(request, event_id=None):
         'event': event,
         'event_participations': event_participations
     })
+
+@login_required
+def student_management(request):
+    # Only allow school admins
+    if not request.user.role or request.user.role.name.lower() != 'school admin':
+        return redirect('homepage')
+    students = Student.objects.select_related('school', 'parent').all().order_by('-id')
+    return render(request, 'student_management.html', {'students': students})
+
+@require_POST
+@login_required
+def verify_student(request, student_id):
+    # Only allow school admins
+    if not request.user.role or request.user.role.name.lower() != 'school admin':
+        return redirect('homepage')
+    student = get_object_or_404(Student, id=student_id)
+    student.verified = True
+    student.save()
+    return redirect('student_management')
 
 
 
