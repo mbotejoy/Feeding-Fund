@@ -1,13 +1,68 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Registered Donors for Event</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registered Donors For an Event</title>
+  <!-- Load Bootstrap from CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
+
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0f7fa 0%, #fffde7 100%);
+      font-family: 'Poppins', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .form-outer-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 65vh;
+    }
+    .form-inner-card {
+      background: #d8d6d6;
+      border-radius: 16px;
+      padding: 2.5rem 2rem 2rem 2rem;
+      box-shadow: 0 8px 24px rgba(33, 150, 243, 0.10), 8px 8px 24px rgba(33, 150, 243, 0.12);
+      /* Right and bottom shadow emphasis */
+      max-width: 430px;
+      width: 100%;
+    }
+    @media (max-width: 600px) {
+      .form-inner-card {
+        padding: 1.2rem 0.5rem;
+        max-width: 98vw;
+      }
+    }
+  </style>
+
 </head>
+<body>
+
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="{% static 'Images/Our_Logo.png' %}" alt="Logo" width="120">
+    </a>
+    <span class="navbar-text font-weight-bold text-primary ml-2 h5">Nourished with Joy and Grace</span>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{%url 'homepage'%}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'about_us'%}">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'impact'%}">Impact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  </nav>
 <body>
 <div class="container mt-5">
   <h2 class="mb-4">
@@ -52,7 +107,7 @@
     </table>
   </div>
   
-  <a href="{% url 'communityagent_dashboard' %}" class="btn btn-secondary mt-4">Back to Dashboard</a>
+  <a href="{% url 'communityagent_dashboard' %}" class="btn btn-success mt-4">Back to Dashboard</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -76,5 +131,14 @@
     });
   });
 </script>
+  <!-- Footer -->
+  <footer class="bg-light mt-5 p-3 text-center text-muted">
+    &copy; 2025 Nourished by Joy and Grace | Powered by Grace & Joy
+  </footer>
+
+  <!-- Bootstrap JS (for dropdowns/modals) -->
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

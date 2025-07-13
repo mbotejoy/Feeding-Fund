@@ -147,15 +147,25 @@ def register_child(request):
     return render(request, 'forms/student.html', {'form': form})
 
 # View to handle attendance
+@login_required
 def attendance(request):
+    # Only allow school admins
+    role_name = str(request.user.role.name).strip().lower() if request.user.role else None
+    if role_name != 'school admin':
+        messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
+        return redirect('homepage')
+    # Limit students to those in the school admin's school
+    students_qs = Student.objects.filter(school=request.user.school)
     if request.method == 'POST':
         form = AttendanceForm(request.POST)
+        form.fields['student'].queryset = students_qs
         if form.is_valid():
             form.save()
             messages.success(request, "Recorded Student Attendance Successfully!")
             return redirect('school_admin')
     else:
         form = AttendanceForm()
+        form.fields['student'].queryset = students_qs
     return render(request, 'forms/attendance.html', {'form': form})
 
 #View of the submission of a feeding report
@@ -239,7 +249,8 @@ def school_admin(request):
     if role_name != 'school admin':
         messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
-    attendance_records = Attendance.objects.select_related('student__school').all()
+    # Only show attendance for students in the school admin's school
+    attendance_records = Attendance.objects.select_related('student__school').filter(student__school=request.user.school)
     students = Student.objects.filter(school=request.user.school)
     return render(request, 'teacher.html', {
         'attendance_records': attendance_records,
@@ -592,7 +603,8 @@ def student_management(request):
     # Only allow school admins
     if not request.user.role or request.user.role.name.lower() != 'school admin':
         return redirect('homepage')
-    students = Student.objects.select_related('school', 'parent').all().order_by('-id')
+    # Only show students in the school admin's school
+    students = Student.objects.select_related('school', 'parent').filter(school=request.user.school).order_by('-id')
     return render(request, 'student_management.html', {'students': students})
 
 @require_POST
