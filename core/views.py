@@ -201,6 +201,7 @@ def give_feedback(request):
 
 
 
+
 # Show the donor dashboard
 @login_required
 def donor_dashboard(request):
@@ -208,7 +209,11 @@ def donor_dashboard(request):
     if role_name != 'donor':
         messages.error(request, f'Unauthorized access. Your role: {role_name!r}')
         return redirect('homepage')
-    return render(request, 'donor_dashboard.html')  
+    feeding_reports = FeedingReport.objects.all().order_by('-report_date')[:20]  # Show latest 20 reports
+    context = {
+        'feeding_reports': feeding_reports,
+    }
+    return render(request, 'donor_dashboard.html', context)
 
 # Show the community_agent dashboard
 @login_required
